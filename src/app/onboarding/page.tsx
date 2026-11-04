@@ -1,28 +1,31 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
 import { OnboardingChat } from "./OnboardingChat";
 import { createClient } from "@/lib/supabase/server";
 import { getSupabasePublicEnv, isValidSupabaseEnv } from "@/lib/supabase/env";
 import { SITE_CONFIG } from "@/lib/constants";
+import { LogoWatermark } from "@/components/shared/LogoWatermark";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Your profile",
-  description: `Personalize ${SITE_CONFIG.name} in a few steps.`,
+  title: "Personalize Wellness",
+  description: `Personalize your ${SITE_CONFIG.name} cycle and wellness profile.`,
 };
 
 export default async function OnboardingPage({
   searchParams,
 }: {
-  searchParams: { edit?: string };
+  searchParams: Promise<{ edit?: string }>;
 }) {
   const { url: sbUrl, key: sbKey } = getSupabasePublicEnv();
   if (!isValidSupabaseEnv(sbUrl, sbKey)) {
     redirect("/login?error=config");
   }
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -46,8 +49,8 @@ export default async function OnboardingPage({
     "profileComplete" in ob &&
     (ob as { profileComplete?: boolean }).profileComplete === true;
 
-  const allowRerun =
-    searchParams.edit === "1" || searchParams.edit === "true";
+  const sp = await searchParams;
+  const allowRerun = sp?.edit === "1" || sp?.edit === "true";
 
   if (onboardingDone && !allowRerun) {
     redirect("/dashboard");
@@ -63,24 +66,41 @@ export default async function OnboardingPage({
       : null);
 
   return (
-    <main className="min-h-[100dvh] px-4 py-24 bg-obsidian-DEFAULT relative overflow-hidden">
-      <div
-        className="absolute inset-0 bg-gradient-to-b from-violet-950/15 via-transparent to-rose-950/10 pointer-events-none"
-        aria-hidden
-      />
-      <div className="relative max-w-3xl mx-auto text-center mb-10 space-y-2">
-        <p className="text-xs font-semibold uppercase tracking-wider text-violet-300/90">
+    <main className="min-h-screen px-4 pt-16 pb-24 bg-[#F8F3E9] text-[#101F3B] relative overflow-hidden">
+      {/* Subtle FERMORA Brand Watermark */}
+      <LogoWatermark variant="corner-top-right" opacity={0.04} />
+
+      <div className="relative max-w-3xl mx-auto text-center mb-10 space-y-3">
+        <Link href="/" className="inline-flex items-center gap-2 mb-2">
+          <div className="w-8 h-10 relative">
+            <Image
+              src="/images/femora.logo.png"
+              alt="FERMORA Logo"
+              width={32}
+              height={40}
+              className="object-contain w-full h-full"
+            />
+          </div>
+          <span className="font-display text-2xl font-semibold tracking-wider text-[#101F3B]">
+            {SITE_CONFIG.name}
+          </span>
+        </Link>
+
+        <p className="text-xs font-semibold uppercase tracking-wider text-[#B66ACB]">
           Welcome{greetingName ? `, ${greetingName}` : ""}
         </p>
-        <h1 className="font-display text-3xl sm:text-4xl font-semibold text-white">
-          Let Sakhi learn your rhythm
+        <h1 className="font-display text-3xl sm:text-4xl font-semibold text-[#101F3B]">
+          Personalize your wellness rhythm
         </h1>
-        <p className="text-white/45 text-sm max-w-md mx-auto">
-          A short, private chat so budgeting and wellness nudges match how you
-          actually feel — whether you track cycles or not.
+        <p className="text-[#26334A]/70 text-sm max-w-md mx-auto font-light">
+          A confidential, gentle check-in so FERMORA can model your cycle phases,
+          craving support, and care reminders to your life.
         </p>
       </div>
-      <OnboardingChat />
+
+      <div className="relative z-10">
+        <OnboardingChat />
+      </div>
     </main>
   );
 }

@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
   const parsed = bodySchema.safeParse(json);
   if (!parsed.success) {
     return NextResponse.json(
-      { ok: false, error: parsed.error.errors[0]?.message ?? "Invalid email" },
+      { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid email" },
       { status: 422 }
     );
   }

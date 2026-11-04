@@ -2,17 +2,23 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { MessageCircle, Send, X, Sparkles, Loader2 } from "lucide-react";
+import Image from "next/image";
+import {
+  MessageCircleIcon,
+  SendIcon,
+  CloseIcon,
+  LoaderIcon,
+  HeartIcon,
+} from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { ChatBudgetQuickAdd } from "@/components/budget/ChatBudgetQuickAdd";
 
 type Role = "user" | "assistant";
 
 type ChatMessage = { role: Role; content: string };
 
 const WELCOME_TEXT =
-  "Hi — I’m Sakhi, your calm coach for money and period education (private, on-device). Use Budget quick add below to log pocket money and expenses when you’re signed in, or ask about budgeting, debt, scams, SIPs, periods, and more — not medical or regulated investment advice.";
+  "Welcome to FERMORA. I am your private companion for cycle intelligence, craving wisdom, and wellness care. Ask about cycle phases, cramps, comfort snacks, mood swings, or planning your energy. (Educational guidance, not medical diagnosis.)";
 
 export function SakhiChatbot() {
   const [open, setOpen] = useState(false);
@@ -78,16 +84,8 @@ export function SakhiChatbot() {
 
       const reply = data.reply as string;
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
-    } catch (e) {
-      const isTypeFetch =
-        e instanceof TypeError &&
-        (String(e.message).includes("fetch") ||
-          String(e.message).includes("Failed to fetch"));
-      setError(
-        isTypeFetch
-          ? "Could not reach the server (Failed to fetch). Check your connection, ad-blockers, and that the site URL matches your deployment (http vs https)."
-          : "Network error. Check your connection."
-      );
+    } catch {
+      setError("Network error. Check your connection.");
       setMessages((prev) => prev.slice(0, -1));
     } finally {
       setLoading(false);
@@ -105,51 +103,57 @@ export function SakhiChatbot() {
         <AnimatePresence>
           {open && (
             <motion.div
-              initial={{ opacity: 0, y: 16, scale: 0.96 }}
+              initial={{ opacity: 0, y: 12, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 12, scale: 0.98 }}
-              transition={{ type: "spring", damping: 26, stiffness: 320 }}
+              exit={{ opacity: 0, y: 10, scale: 0.98 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
               className={cn(
                 "w-[min(100vw-2rem,22rem)] sm:w-[24rem]",
                 "h-[min(70dvh,32rem)] flex flex-col overflow-hidden",
-                "rounded-2xl border border-white/[0.12] bg-obsidian-900/95 backdrop-blur-xl shadow-2xl shadow-rose-900/20"
+                "rounded-xl border border-[#E8DFD5] bg-[#FAF7F2]"
               )}
               role="dialog"
-              aria-label="Sakhi chat"
+              aria-label="FERMORA Wellness chat"
             >
-              <div className="flex items-center justify-between gap-2 px-4 py-3 border-b border-white/[0.08] bg-gradient-to-r from-rose-500/10 to-violet-500/10">
-                <div className="flex items-center gap-2 min-w-0">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-rose-500/20 border border-rose-400/25">
-                    <Sparkles className="h-4 w-4 text-rose-200" aria-hidden />
-                  </span>
+              {/* Header */}
+              <div className="flex items-center justify-between gap-2 px-4 py-3.5 border-b border-[#E8DFD5] bg-[#FAF7F2]">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-6 h-8 relative shrink-0">
+                    <Image
+                      src="/images/femora.logo.png"
+                      alt="FERMORA Logo"
+                      width={24}
+                      height={30}
+                      className="object-contain w-full h-full"
+                    />
+                  </div>
                   <div className="min-w-0">
-                    <p className="text-sm font-semibold text-white truncate">
-                      Ask Sakhi
+                    <p className="text-sm font-semibold text-[#101F3B] truncate">
+                      FERMORA Wellness Guide
                     </p>
-                    <p className="text-[0.65rem] text-white/40 truncate">
-                      Finance · mood · cravings (India)
+                    <p className="text-[10px] text-[#26334A]/60 truncate font-light">
+                      Cycle intelligence · Cravings · Mindful care
                     </p>
                   </div>
                 </div>
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
-                  className="p-2 rounded-lg text-white/50 hover:text-white hover:bg-white/10 transition-colors"
+                  className="p-1 rounded-md text-[#26334A]/60 hover:text-[#101F3B] hover:bg-[#F8F3E9] transition-colors cursor-pointer"
                   aria-label="Close chat"
                 >
-                  <X className="h-4 w-4" />
+                  <CloseIcon size={16} />
                 </button>
               </div>
 
-              <ChatBudgetQuickAdd />
-
+              {/* Chat Message History */}
               <div
                 ref={scrollRef}
-                className="flex-1 overflow-y-auto px-3 py-3 space-y-3 scroll-smooth"
+                className="flex-1 overflow-y-auto px-4 py-3 space-y-3 scroll-smooth text-xs"
               >
                 {messages.length === 0 && (
                   <div className="flex justify-start">
-                    <div className="max-w-[92%] rounded-2xl rounded-bl-md px-3 py-2 text-[0.8125rem] leading-relaxed bg-white/[0.06] text-white/80 border border-white/[0.08]">
+                    <div className="max-w-[92%] rounded-lg p-3.5 leading-relaxed bg-[#F8F3E9] text-[#101F3B] border border-[#E8DFD5] font-light">
                       {WELCOME_TEXT}
                     </div>
                   </div>
@@ -164,10 +168,10 @@ export function SakhiChatbot() {
                   >
                     <div
                       className={cn(
-                        "max-w-[92%] rounded-2xl px-3 py-2 text-[0.8125rem] leading-relaxed",
+                        "max-w-[92%] rounded-lg p-3 leading-relaxed",
                         m.role === "user"
-                          ? "bg-violet-500/25 text-white/90 border border-violet-400/20 rounded-br-md"
-                          : "bg-white/[0.06] text-white/80 border border-white/[0.08] rounded-bl-md"
+                          ? "bg-[#B66ACB] text-white"
+                          : "bg-[#F8F3E9] text-[#101F3B] border border-[#E8DFD5] font-light"
                       )}
                     >
                       {m.content}
@@ -176,27 +180,27 @@ export function SakhiChatbot() {
                 ))}
                 {loading && (
                   <div className="flex justify-start">
-                    <div className="inline-flex items-center gap-2 rounded-2xl px-3 py-2 bg-white/[0.06] border border-white/[0.08] text-white/50 text-xs">
-                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                      Sakhi is thinking…
+                    <div className="inline-flex items-center gap-2 rounded-lg px-3 py-2 bg-[#F8F3E9] border border-[#E8DFD5] text-[#26334A]/70 text-xs font-light">
+                      <LoaderIcon size={13} className="text-[#B66ACB]" />
+                      Reflecting gently...
                     </div>
                   </div>
                 )}
               </div>
 
               {error && (
-                <p className="px-3 pb-1 text-xs text-red-400/90" role="alert">
+                <p className="px-4 pb-1 text-xs text-red-600 font-medium" role="alert">
                   {error}
                 </p>
               )}
 
-              <p className="px-3 text-[0.65rem] text-white/35 leading-snug">
-                Not medical or investment advice. For emergencies, contact a
-                professional.
+              <p className="px-4 text-[10px] text-[#26334A]/60 leading-snug font-light">
+                Educational guidance. Consult your doctor for clinical advice.
               </p>
 
+              {/* Chat Input */}
               <form
-                className="p-3 pt-2 border-t border-white/[0.08] flex gap-2"
+                className="p-3 border-t border-[#E8DFD5] bg-[#FAF7F2] flex gap-2"
                 onSubmit={(e) => {
                   e.preventDefault();
                   void send();
@@ -206,45 +210,44 @@ export function SakhiChatbot() {
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Message Sakhi…"
+                  placeholder="Ask FERMORA about your cycle or cravings..."
                   disabled={loading}
                   maxLength={2000}
-                  className="flex-1 h-11 rounded-xl border border-white/10 bg-white/5 px-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-rose-500/50"
+                  className="flex-1 h-9 rounded-md border border-[#E8DFD5] bg-[#F8F3E9] px-3 text-xs text-[#101F3B] placeholder-[#26334A]/40 focus:outline-none focus:ring-2 focus:ring-[#B66ACB]"
                   aria-label="Message"
                 />
                 <Button
                   type="submit"
                   size="icon"
                   disabled={loading || !input.trim()}
-                  className="h-11 w-11 shrink-0 rounded-xl"
+                  className="h-9 w-9 shrink-0 rounded-md bg-[#B66ACB] hover:bg-[#9C4EB3] text-white cursor-pointer border border-[#9C4EB3]"
                   aria-label="Send"
                 >
-                  <Send className="h-4 w-4" />
+                  <SendIcon size={14} />
                 </Button>
               </form>
             </motion.div>
           )}
         </AnimatePresence>
 
-        <motion.button
+        {/* Floating Toggle Button (No drop shadow, crisp border) */}
+        <button
           type="button"
-          layout
           onClick={() => setOpen((o) => !o)}
           className={cn(
-            "h-14 w-14 rounded-full shadow-lg flex items-center justify-center",
-            "bg-gradient-to-br from-rose-500 to-violet-600 text-white",
-            "border border-white/20 hover:opacity-95 active:scale-[0.98] transition-transform",
-            "focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 focus-visible:ring-offset-2 focus-visible:ring-offset-obsidian-DEFAULT"
+            "h-12 w-12 rounded-full flex items-center justify-center cursor-pointer",
+            "bg-[#B66ACB] text-white hover:bg-[#9C4EB3] hover:scale-105 active:scale-95 transition-all duration-150 ease-out",
+            "border border-[#9C4EB3] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B66ACB]"
           )}
           aria-expanded={open}
-          aria-label={open ? "Close Sakhi chat" : "Open Sakhi chat"}
+          aria-label={open ? "Close FERMORA assistant" : "Open FERMORA assistant"}
         >
           {open ? (
-            <X className="h-6 w-6" aria-hidden />
+            <CloseIcon size={20} aria-hidden="true" />
           ) : (
-            <MessageCircle className="h-6 w-6" aria-hidden />
+            <MessageCircleIcon size={20} aria-hidden="true" />
           )}
-        </motion.button>
+        </button>
       </div>
     </>
   );

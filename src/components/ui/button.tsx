@@ -6,25 +6,27 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm font-semibold ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 focus-visible:ring-offset-obsidian-900 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-xs sm:text-sm font-medium transition-all duration-150 ease-out active:scale-[0.98] motion-reduce:transform-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B66ACB] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
   {
     variants: {
       variant: {
         default:
-          "bg-gradient-to-r from-rose-500 to-rose-600 text-white shadow-glow-rose hover:from-rose-400 hover:to-rose-500 hover:shadow-lg active:scale-[0.98]",
+          "bg-[#B66ACB] text-white hover:bg-[#9C4EB3] hover:-translate-y-0.5 active:translate-y-0 border border-[#9C4EB3]",
         outline:
-          "border border-white/15 bg-white/5 text-white hover:bg-white/10 hover:border-white/25 active:scale-[0.98]",
+          "border border-[#E8DFD5] bg-[#FAF7F2] text-[#101F3B] hover:bg-[#FAF4EB] hover:border-[#B66ACB]/60 hover:-translate-y-0.5 active:translate-y-0",
         ghost:
-          "text-white/70 hover:text-white hover:bg-white/5 active:scale-[0.98]",
-        link: "text-rose-400 underline-offset-4 hover:underline hover:text-rose-300",
+          "text-[#26334A] hover:text-[#101F3B] hover:bg-[#E6DDF4]/40 active:scale-[0.98]",
+        link: "text-[#B66ACB] underline-offset-4 hover:underline hover:text-[#9C4EB3]",
         violet:
-          "bg-gradient-to-r from-violet-500 to-violet-600 text-white shadow-glow-violet hover:from-violet-400 hover:to-violet-500 hover:shadow-lg active:scale-[0.98]",
+          "bg-[#101F3B] text-white hover:bg-[#26334A] hover:-translate-y-0.5 active:translate-y-0 border border-[#101F3B]",
+        orchid:
+          "bg-[#B66ACB] text-white hover:bg-[#8637A7] hover:-translate-y-0.5 active:translate-y-0 border border-[#8637A7]",
       },
       size: {
-        default: "h-11 px-6 py-2",
-        sm: "h-9 rounded-lg px-4 text-xs",
-        lg: "h-13 rounded-xl px-8 py-3 text-base",
-        icon: "h-10 w-10",
+        default: "h-10 px-5 py-2",
+        sm: "h-8.5 rounded-md px-3.5 text-xs",
+        lg: "h-11 rounded-md px-7 text-sm sm:text-base",
+        icon: "h-9 w-9",
       },
     },
     defaultVariants: {

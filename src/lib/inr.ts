@@ -1,6 +1,6 @@
 const PAISE_PER_INR = 100;
 
-/** Max single entry: ₹5,00,000 — sanity cap */
+/** Max single entry: ₹5,00,000  -  sanity cap */
 export const MAX_ENTRY_INR = 500_000;
 
 export function inrToPaise(inr: number): number {

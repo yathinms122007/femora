@@ -1,9 +1,9 @@
-// Security utilities — server-side only patterns
+// Security utilities  -  server-side only patterns
 // These helpers are designed to be called from Server Actions or API routes
 
 /**
  * Sanitizes a string input to prevent injection attacks.
- * Uses allowlist approach — strips anything not in the allowed character set.
+ * Uses allowlist approach  -  strips anything not in the allowed character set.
  */
 export function sanitizeInput(input: string): string {
   return input
@@ -23,7 +23,7 @@ export function getRequestFingerprint(
   userAgent: string | null
 ): string {
   const raw = `${ip ?? "unknown"}-${userAgent ?? "unknown"}`;
-  // Simple djb2 hash — not cryptographic, just for rate limit keys
+  // Simple djb2 hash  -  not cryptographic, just for rate limit keys
   let hash = 5381;
   for (let i = 0; i < raw.length; i++) {
     hash = (hash << 5) + hash + raw.charCodeAt(i);
@@ -40,7 +40,7 @@ export function isBot(honeypotValue: string | undefined): boolean {
 }
 
 /**
- * Safe structured response builder — never exposes internal errors to client.
+ * Safe structured response builder  -  never exposes internal errors to client.
  */
 export function safeError(
   userMessage: string,

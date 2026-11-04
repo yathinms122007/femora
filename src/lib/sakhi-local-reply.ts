@@ -1,5 +1,5 @@
 /**
- * Local Sakhi reply engine — aligned with `SAKHI_MASTER_SYSTEM_PROMPT` in `sakhi-persona.ts`.
+ * Local Sakhi reply engine  -  aligned with `SAKHI_MASTER_SYSTEM_PROMPT` in `sakhi-persona.ts`.
  * Intent scoring + curated templates (India / student context). Not medical or regulated advice.
  */
 
@@ -24,7 +24,7 @@ function norm(s: string): string {
     .trim();
 }
 
-/** Crisis / urgent — override all other intents (matches persona red-flag list) */
+/** Crisis / urgent  -  override all other intents (matches persona red-flag list) */
 function crisisReply(text: string): string | null {
   const n = norm(text);
   const selfHarm =
@@ -307,12 +307,12 @@ function isLateMissedConcern(text: string): boolean {
 function lateMissedPeriodReply(): string {
   return formatCoachReply({
     validate:
-      "That’s a very common worry — you’re not alone, and it’s okay to feel unsure.",
+      "That’s a very common worry  -  you’re not alone, and it’s okay to feel unsure.",
     direct:
-      "I can’t tell you exactly why **your** period is late or missed without a clinician. Cycles often shift with stress, sleep, illness, travel, weight change, or intense exams — and many people have an off month. **If pregnancy could be relevant** to your body, a home test (used as directed) or a doctor’s visit is how you get a clear answer — I can’t confirm or rule that out here.",
+      "I can’t tell you exactly why **your** period is late or missed without a clinician. Cycles often shift with stress, sleep, illness, travel, weight change, or intense exams  -  and many people have an off month. **If pregnancy could be relevant** to your body, a home test (used as directed) or a doctor’s visit is how you get a clear answer  -  I can’t confirm or rule that out here.",
     explain: [
-      "**Track:** first day of last period, any symptoms, stress/sleep changes — useful for you or a doctor.",
-      "**Comfort now:** steady meals, hydration, rest, gentle movement if it feels okay — nothing here replaces care if you feel unwell.",
+      "**Track:** first day of last period, any symptoms, stress/sleep changes  -  useful for you or a doctor.",
+      "**Comfort now:** steady meals, hydration, rest, gentle movement if it feels okay  -  nothing here replaces care if you feel unwell.",
     ],
     steps: [
       "If a period is **very late** for you, or you have **new severe pain**, **very heavy bleeding**, **fainting**, or **fever**, seek medical care promptly.",
@@ -333,7 +333,7 @@ function periodNextReply(userText: string): string {
         direct:
           `If your last period started **${date}** and you use about **${cycleDays} days** per cycle as a placeholder (many people vary), your **next period might land around ${next}**.`,
         explain: [
-          "Tracking **3–6 cycles** on paper or an app gives you **your** average — that beats any guess from a chatbot.",
+          "Tracking **3–6 cycles** on paper or an app gives you **your** average  -  that beats any guess from a chatbot.",
         ],
         steps: [
           "Note the first day of bleeding each month.",
@@ -347,7 +347,7 @@ function periodNextReply(userText: string): string {
     direct:
       "To estimate the next period, I need your **last period start date** (first day of full flow). You can type it like **2026-03-01** or **15/03/2026**.",
     explain: [
-      "Many cycles fall roughly in the **21–35 day** range — use what matches **your** history best.",
+      "Many cycles fall roughly in the **21–35 day** range  -  use what matches **your** history best.",
     ],
     caution: SAKHI_MEDICAL_DISCLAIMER,
   });
@@ -356,10 +356,10 @@ function periodNextReply(userText: string): string {
 function periodGeneralReply(): string {
   return formatCoachReply({
     direct:
-      "Periods are normal, and taking care of yourself around them is practical — not something to be ashamed of.",
+      "Periods are normal, and taking care of yourself around them is practical  -  not something to be ashamed of.",
     explain: [
       "**Hygiene:** change pads/tampons/cups as needed, wash hands, keep breathable underwear when you can.",
-      "**Comfort:** warmth on the belly, hydration, balanced meals, rest — adjust to what feels right for your body.",
+      "**Comfort:** warmth on the belly, hydration, balanced meals, rest  -  adjust to what feels right for your body.",
       "**Money (India):** small monthly line item for products; buying on sale or splitting bulk with a flatmate can help.",
     ],
     caution: SAKHI_MEDICAL_DISCLAIMER,
@@ -368,12 +368,12 @@ function periodGeneralReply(): string {
 
 function pmsReply(): string {
   return formatCoachReply({
-    validate: "PMS can feel rough — mood dips, cravings, cramps, and bloating are common, and they’re not a character flaw.",
+    validate: "PMS can feel rough  -  mood dips, cravings, cramps, and bloating are common, and they’re not a character flaw.",
     direct:
       "Think **steady routines** more than perfection: sleep, food, and gentle movement often help more than strict rules.",
     explain: [
       "**Food ideas:** dal–rice–sabzi, fruit, curd; if you crave sweet/salty, try smaller portions of home-style snacks (makhana, chana, fruit chaat) so money and energy stay steadier.",
-      "**Money:** a tiny weekly “comfort” budget can stop impulse swipes from piling up — no shame, just structure.",
+      "**Money:** a tiny weekly “comfort” budget can stop impulse swipes from piling up  -  no shame, just structure.",
     ],
     caution: SAKHI_MEDICAL_DISCLAIMER,
   });
@@ -395,9 +395,9 @@ function sipReply(userText: string): string {
     const { suggested, note } = suggestMonthlySipInr(salary, goal);
     return formatCoachReply({
       direct:
-        `With about **₹${salary.toLocaleString("en-IN")}/month** in hand and a **${goal.replace("_", " ")}**-style goal, a **rough educational starting point** some people use is around **₹${suggested.toLocaleString("en-IN")}/month** toward SIPs — ${note}`,
+        `With about **₹${salary.toLocaleString("en-IN")}/month** in hand and a **${goal.replace("_", " ")}**-style goal, a **rough educational starting point** some people use is around **₹${suggested.toLocaleString("en-IN")}/month** toward SIPs  -  ${note}`,
       explain: [
-        "All investing has **risk** — start small, use **direct** plans when possible, and don’t lock away money you may need next month.",
+        "All investing has **risk**  -  start small, use **direct** plans when possible, and don’t lock away money you may need next month.",
         "Keep **3–6 months of must-pay expenses** in something liquid before chasing long-term funds.",
       ],
       caution: SAKHI_FINANCE_DISCLAIMER,
@@ -405,7 +405,7 @@ function sipReply(userText: string): string {
   }
   return formatCoachReply({
     direct:
-      "**SIPs** are a habit: you invest a fixed sum on a schedule. They don’t guarantee returns — they’re a structure, not a promise.",
+      "**SIPs** are a habit: you invest a fixed sum on a schedule. They don’t guarantee returns  -  they’re a structure, not a promise.",
     steps: [
       "Clarify goal: **emergency** vs **long-term growth** vs **short-term**.",
       "Share **monthly money in hand (₹)** and I can repeat a rough range in plain numbers.",
@@ -417,12 +417,12 @@ function sipReply(userText: string): string {
 function budgetReply(): string {
   return formatCoachReply({
     validate:
-      "Money stress as a student is extremely common — you’re not “bad with money” for finding it hard.",
+      "Money stress as a student is extremely common  -  you’re not “bad with money” for finding it hard.",
     direct:
       "A simple frame: **must-pay** (rent/mess/phone) → **small savings** (even ₹100/week counts) → **flexible spending**.",
     explain: [
-      "Move savings **on day one** of the month if you can (UPI mandate / bank rule) — out of sight, less temptation.",
-      "If you “always run out,” try a **weekly** spending cap for food delivery and impulse buys — adjust weekly, not with shame.",
+      "Move savings **on day one** of the month if you can (UPI mandate / bank rule)  -  out of sight, less temptation.",
+      "If you “always run out,” try a **weekly** spending cap for food delivery and impulse buys  -  adjust weekly, not with shame.",
     ],
     caution: SAKHI_FINANCE_DISCLAIMER,
   });
@@ -431,7 +431,7 @@ function budgetReply(): string {
 function scamReply(): string {
   return formatCoachReply({
     direct:
-      "If something promises **easy money**, **guaranteed returns**, or **urgent KYC**, slow down — that’s where scams thrive.",
+      "If something promises **easy money**, **guaranteed returns**, or **urgent KYC**, slow down  -  that’s where scams thrive.",
     steps: [
       "Never share **OTP**, **UPI PIN**, or **card CVV** with anyone “from the bank.”",
       "Open bank apps from **official stores**; type URLs yourself.",
@@ -444,9 +444,9 @@ function scamReply(): string {
 function emergencyFundReply(): string {
   return formatCoachReply({
     direct:
-      "An emergency fund is **money you can reach in a day or two** for real surprises — not your long-term investing pot.",
+      "An emergency fund is **money you can reach in a day or two** for real surprises  -  not your long-term investing pot.",
     explain: [
-      "A common aim is **3–6 months of essential expenses** — as a student, even **₹2,000–5,000** set aside can soften shocks.",
+      "A common aim is **3–6 months of essential expenses**  -  as a student, even **₹2,000–5,000** set aside can soften shocks.",
     ],
     steps: [
       "Pick one separate savings pocket or account label: “emergency only.”",
@@ -459,11 +459,11 @@ function emergencyFundReply(): string {
 function wellnessReply(): string {
   return formatCoachReply({
     validate:
-      "Stress and money worry can show up in sleep, appetite, and focus — that doesn’t mean you’re failing.",
+      "Stress and money worry can show up in sleep, appetite, and focus  -  that doesn’t mean you’re failing.",
     direct:
       "Tiny stabilisers beat giant resolutions: **one** regular meal time, **one** short walk, **one** screen-off window before bed.",
     steps: [
-      "If low mood lasts **weeks** or you have thoughts of hurting yourself, please reach out to a counsellor or doctor — that’s care, not weakness.",
+      "If low mood lasts **weeks** or you have thoughts of hurting yourself, please reach out to a counsellor or doctor  -  that’s care, not weakness.",
     ],
     caution: SAKHI_MEDICAL_DISCLAIMER,
   });
@@ -472,9 +472,9 @@ function wellnessReply(): string {
 function greetingReply(): string {
   return formatCoachReply({
     direct:
-      "Hi — I’m **Sakhi**, your calm coach for **money habits** and **period education** (built-in, private, no judgment).",
+      "Hi  -  I’m **Sakhi**, your calm coach for **money habits** and **period education** (built-in, private, no judgment).",
     explain: [
-      "Ask about **budgeting, scams, SIPs, debt**, or **cycles, cramps, late periods, hygiene** — I’ll keep it simple and practical.",
+      "Ask about **budgeting, scams, SIPs, debt**, or **cycles, cramps, late periods, hygiene**  -  I’ll keep it simple and practical.",
     ],
     caution: `${SAKHI_MEDICAL_DISCLAIMER} ${SAKHI_FINANCE_DISCLAIMER}`,
   });
@@ -482,11 +482,11 @@ function greetingReply(): string {
 
 function affordReply(): string {
   return formatCoachReply({
-    validate: "Wanting something doesn’t make you irresponsible — clarity helps you choose freely.",
+    validate: "Wanting something doesn’t make you irresponsible  -  clarity helps you choose freely.",
     direct:
       "Before a purchase: subtract **must-pays** and **tiny savings**, then look at what’s truly left for the week.",
     explain: [
-      "If the buy is a big chunk of monthly money, try **24–48 hours** before you pay — many impulses cool down.",
+      "If the buy is a big chunk of monthly money, try **24–48 hours** before you pay  -  many impulses cool down.",
       "If you still want it, **trade something else off** (one less delivery meal, one subscription) so it’s a swap, not a spiral.",
     ],
     caution: SAKHI_FINANCE_DISCLAIMER,
@@ -496,10 +496,10 @@ function affordReply(): string {
 function literacyReply(): string {
   return formatCoachReply({
     direct:
-      "**Credit score:** paying EMIs/cards on time and not maxing cards tends to help over time — it’s a habit signal, not a moral grade.",
+      "**Credit score:** paying EMIs/cards on time and not maxing cards tends to help over time  -  it’s a habit signal, not a moral grade.",
     explain: [
       "**PAN / bank:** never share OTP; verify SMS in your official app.",
-      "**Tax (students):** stipends and internships vary — keep Form 16 if you earn; use trusted free ITR tools if you file.",
+      "**Tax (students):** stipends and internships vary  -  keep Form 16 if you earn; use trusted free ITR tools if you file.",
     ],
     caution: SAKHI_FINANCE_DISCLAIMER,
   });
@@ -508,10 +508,10 @@ function literacyReply(): string {
 function loanTrapReply(): string {
   return formatCoachReply({
     direct:
-      "**Instant loan apps** can hide huge fees and harassment — if something feels coercive, pause and get offline help.",
+      "**Instant loan apps** can hide huge fees and harassment  -  if something feels coercive, pause and get offline help.",
     steps: [
       "Prefer **scheduled banks** or clear education loans with paperwork you can read.",
-      "If repayment is crushing, talk to someone you trust and explore legal / banking ombudsman routes — you still have rights.",
+      "If repayment is crushing, talk to someone you trust and explore legal / banking ombudsman routes  -  you still have rights.",
     ],
     caution: SAKHI_FINANCE_DISCLAIMER,
   });
@@ -520,9 +520,9 @@ function loanTrapReply(): string {
 function debtReply(): string {
   return formatCoachReply({
     validate:
-      "Debt can feel shameful — it’s a math-and-habit problem many people face, not a verdict on your worth.",
+      "Debt can feel shameful  -  it’s a math-and-habit problem many people face, not a verdict on your worth.",
     direct:
-      "Two simple approaches people use: **avalanche** — put extra money on **highest interest** first; **snowball** — clear **smallest balance** first for motivation. Pick what you’ll actually stick to.",
+      "Two simple approaches people use: **avalanche**  -  put extra money on **highest interest** first; **snowball**  -  clear **smallest balance** first for motivation. Pick what you’ll actually stick to.",
     explain: [
       "Always cover **minimums** so penalties don’t explode.",
       "Even **₹200/week** extra toward one card/loan moves the timeline.",
@@ -540,7 +540,7 @@ function fallbackReply(): string {
     direct:
       "I’m strongest on **student money** (budget, scams, SIPs, debt, emergency savings) and **period education** (cycles, PMS, hygiene, when to seek care).",
     steps: [
-      "Try a concrete question: “**Period is late and I’m scared**,” or “**₹3,000/month — how do I not run out?**”",
+      "Try a concrete question: “**Period is late and I’m scared**,” or “**₹3,000/month  -  how do I not run out?**”",
     ],
     caution: `${SAKHI_MEDICAL_DISCLAIMER} ${SAKHI_FINANCE_DISCLAIMER}`,
   });

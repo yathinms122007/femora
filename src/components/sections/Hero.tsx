@@ -1,155 +1,141 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, LogIn, UserPlus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { GlowOrb } from "@/components/shared/GlowOrb";
-import { GridBackground } from "@/components/shared/GridBackground";
-import { GradientText } from "@/components/shared/GradientText";
+import { ChevronDownIcon, HeartIcon } from "@/components/ui/icons";
+import { LogoWatermark } from "@/components/shared/LogoWatermark";
 import { SITE_CONFIG } from "@/lib/constants";
-import {
-  staggerContainerVariants,
-  fadeUpVariants,
-  dramaticTransition,
-} from "@/lib/animations";
-
-const SceneWrapper = dynamic(
-  () =>
-    import("@/components/three/SceneWrapper").then((mod) => ({
-      default: mod.SceneWrapper,
-    })),
-  { ssr: false }
-);
-
-const FinancialOrb = dynamic(
-  () =>
-    import("@/components/three/FinancialOrb").then((mod) => ({
-      default: mod.FinancialOrb,
-    })),
-  { ssr: false }
-);
-
-const ParticleField = dynamic(
-  () =>
-    import("@/components/three/ParticleField").then((mod) => ({
-      default: mod.ParticleField,
-    })),
-  { ssr: false }
-);
 
 export function Hero() {
   return (
     <section
       id="hero"
-      aria-label="SakhiFi hero"
-      className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden pt-16"
+      aria-label="FERMORA introduction"
+      className="relative min-h-[95dvh] flex flex-col items-center justify-center px-4 pt-24 pb-12 overflow-hidden bg-[#F8F3E9]"
     >
-      {/* Background layers */}
-      <div className="absolute inset-0 bg-hero-gradient" aria-hidden="true" />
-      <GridBackground />
-      <GlowOrb color="rose" size="xl" className="-top-20 -right-32" intensity="medium" />
-      <GlowOrb color="violet" size="xl" className="-bottom-20 -left-32" intensity="medium" />
+      {/* ─── Background Layer with Subtle Logo Watermarks ─── */}
+      <LogoWatermark
+        variant="corner-top-right"
+        size={280}
+        opacity={0.04}
+        className="hidden sm:block"
+      />
+      <LogoWatermark
+        variant="corner-bottom-left"
+        size={240}
+        opacity={0.035}
+        className="hidden sm:block"
+      />
 
-      {/* Three.js background */}
-      <div className="absolute inset-0 opacity-60" aria-hidden="true">
-        <SceneWrapper>
-          <FinancialOrb />
-          <ParticleField />
-        </SceneWrapper>
-      </div>
-
-      {/* Content */}
-      <div className="relative container-max section-padding text-center z-10">
+      {/* ─── Centered Main Hero Content ─── */}
+      <div className="relative z-10 flex flex-col items-center text-center max-w-3xl mx-auto my-auto">
+        {/* Subtle Pill Badge */}
         <motion.div
-          variants={staggerContainerVariants}
-          initial="hidden"
-          animate="visible"
-          className="space-y-8 max-w-4xl mx-auto"
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+          className="mb-8"
         >
-          {/* Badge */}
-          <motion.div variants={fadeUpVariants} className="flex justify-center">
-            <div className="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 border border-rose-500/20">
-              <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse" />
-              <span className="text-xs font-medium text-rose-300 tracking-wide uppercase">
-                Sign in · Magic link · Personalized coaching
-              </span>
-            </div>
-          </motion.div>
+          <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium tracking-wider uppercase text-[#101F3B]/80 bg-[#E6DDF4]/70 border border-[#E8DFD5]">
+            <HeartIcon size={13} className="text-[#B66ACB]" />
+            Women&apos;s Wellness &amp; Cycle Intelligence
+          </span>
+        </motion.div>
 
-          {/* Headline */}
-          <motion.h1
-            variants={fadeUpVariants}
-            className="font-display text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold leading-[1.05] tracking-tight text-balance"
-          >
-            Your AI{" "}
-            <GradientText variant="rose-violet">financial coach</GradientText>
-            <br />
-            <span className="text-white/90">for the student life</span>
-          </motion.h1>
+        {/* Pure Logo Silhouette (Isolated Symbol, 100% Proportional) */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{
+            duration: 0.8,
+            delay: 0.2,
+            ease: [0.16, 1, 0.3, 1],
+          }}
+          className="relative mb-6"
+        >
+          <div className="w-24 h-28 sm:w-28 sm:h-34 md:w-32 md:h-38 flex items-center justify-center">
+            <Image
+              src="/images/femora.logo.png"
+              alt="FERMORA Official Logo"
+              width={196}
+              height={236}
+              priority
+              className="object-contain w-full h-full"
+            />
+          </div>
+        </motion.div>
 
-          {/* Subtitle */}
-          <motion.p
-            variants={fadeUpVariants}
-            className="text-lg sm:text-xl text-white/50 max-w-2xl mx-auto leading-relaxed font-light"
-          >
-            {SITE_CONFIG.description}
-          </motion.p>
+        {/* Large Brand Heading */}
+        <motion.h1
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.7,
+            delay: 0.35,
+            ease: [0.16, 1, 0.3, 1],
+          }}
+          className="font-display text-5xl sm:text-7xl md:text-8xl font-semibold tracking-wider text-[#101F3B] mb-4"
+        >
+          {SITE_CONFIG.name}
+        </motion.h1>
 
-          {/* CTA buttons */}
-          <motion.div
-            variants={fadeUpVariants}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
-          >
-            <Button asChild size="lg" className="group">
-              <a href="/signup">
-                Sign up free
-                <UserPlus
-                  className="w-4 h-4 ml-2 group-hover:translate-x-0.5 transition-transform"
-                  aria-hidden="true"
-                />
-              </a>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="group">
-              <a href="/login">
-                Log in
-                <LogIn className="w-4 h-4 ml-2" aria-hidden="true" />
-              </a>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="group">
-              <a href="#features">
-                See How It Works
-                <ArrowRight
-                  className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"
-                  aria-hidden="true"
-                />
-              </a>
-            </Button>
-          </motion.div>
+        {/* Brand Slogan */}
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.7,
+            delay: 0.48,
+            ease: [0.16, 1, 0.3, 1],
+          }}
+          className="text-lg sm:text-2xl md:text-3xl font-light text-[#26334A]/85 tracking-wide leading-relaxed max-w-xl mx-auto"
+        >
+          {SITE_CONFIG.tagline}
+        </motion.p>
 
-          {/* Trust indicators */}
-          <motion.div
-            variants={fadeUpVariants}
-            className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 pt-4"
+        {/* Action Button Row - Zero Hover Animations, Crisp Focus States */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.65,
+            delay: 0.6,
+            ease: "easeOut",
+          }}
+          className="mt-10 flex flex-wrap items-center justify-center gap-4"
+        >
+          <a
+            href="#modules"
+            className="px-8 py-3 rounded-md text-sm sm:text-base font-medium text-white bg-[#B66ACB] hover:bg-[#9C4EB3] hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] border border-[#9C4EB3] transition-all duration-150 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B66ACB] focus-visible:ring-offset-2 motion-reduce:transform-none"
           >
-            {[
-              "🔒 Privacy-First Architecture",
-              "🛡️ Scam Detection Built-In",
-              "🇮🇳 Made for India",
-            ].map((item) => (
-              <span
-                key={item}
-                className="text-xs text-white/30 font-medium"
-              >
-                {item}
-              </span>
-            ))}
-          </motion.div>
+            Explore Wellness Modules
+          </a>
+          <Link
+            href="/dashboard"
+            className="px-7 py-3 rounded-md text-sm sm:text-base font-medium text-[#101F3B] bg-[#FAF7F2] hover:bg-[#FAF4EB] hover:border-[#B66ACB]/60 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] border border-[#E8DFD5] transition-all duration-150 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B66ACB] focus-visible:ring-offset-2 motion-reduce:transform-none"
+          >
+            Open Dashboard
+          </Link>
         </motion.div>
       </div>
 
-      {/* Bottom gradient fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-obsidian-DEFAULT to-transparent pointer-events-none" />
+      {/* Static Scroll Indicator - No Animated Arrows */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.8, duration: 0.6 }}
+        className="relative z-10 mt-auto pt-6"
+      >
+        <a
+          href="#modules"
+          className="flex flex-col items-center gap-1 text-[11px] font-medium tracking-widest uppercase text-[#26334A]/60 hover:text-[#B66ACB] transition-colors focus:outline-none"
+          aria-label="Scroll to discover modules"
+        >
+          <span>Discover FERMORA</span>
+          <ChevronDownIcon size={14} className="text-[#B66ACB]" />
+        </a>
+      </motion.div>
     </section>
   );
 }

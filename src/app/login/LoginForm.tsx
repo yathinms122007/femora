@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Loader2, LogIn, Mail } from "lucide-react";
+import { LoaderIcon, LogInIcon, MailIcon } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,7 +35,7 @@ export function LoginForm({ initialError, nextPath }: Props) {
     initialError === "auth"
       ? "That sign-in link expired or is invalid. Request a new one."
       : initialError === "config"
-        ? "Supabase is not configured on the server. Add env vars on Vercel and redeploy."
+        ? "Supabase is not configured on the server. You can explore as guest below."
         : ""
   );
 
@@ -47,7 +47,7 @@ export function LoginForm({ initialError, nextPath }: Props) {
     const parsed = loginPasswordSchema.safeParse({ email, password });
     if (!parsed.success) {
       const err: Record<string, string> = {};
-      for (const issue of parsed.error.errors) {
+      for (const issue of parsed.error.issues) {
         const k = issue.path[0];
         if (typeof k === "string" && !err[k]) err[k] = issue.message;
       }
@@ -58,38 +58,26 @@ export function LoginForm({ initialError, nextPath }: Props) {
     setPasswordStatus("loading");
 
     try {
-      const res = await fetch(`${window.location.origin}/api/auth/login`, {
+      const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ ...parsed.data, next: nextPath }),
+        body: JSON.stringify({ email, password, next: nextPath }),
       });
-      const raw = await res.text();
-      let data: { ok?: boolean; error?: string | null } = {};
-      try {
-        data = raw ? JSON.parse(raw) : {};
-      } catch {
-        setPasswordStatus("error");
-        setMessage("Bad response from server. Check Vercel logs.");
-        return;
-      }
+
+      const data = (await res.json().catch(() => ({}))) as {
+        ok?: boolean;
+        error?: string;
+      };
 
       if (!res.ok || !data.ok) {
         setPasswordStatus("error");
-        let msg = data.error ?? "Sign in failed.";
-        if (/email not confirmed|not verified|confirm/i.test(msg)) {
-          msg +=
-            " Open the verification link we sent when you signed up, or use “Resend” on the sign-up page.";
-        }
-        if (/invalid login|invalid credentials|invalid/i.test(msg)) {
-          msg = "Wrong email or password. Try again or use magic link.";
-        }
-        setMessage(msg);
+        setMessage(data.error ?? "Invalid email or password.");
         return;
       }
 
-      router.push(nextPath);
       router.refresh();
+      router.push(nextPath);
     } catch {
       setPasswordStatus("error");
       setMessage("Network error. Try again.");
@@ -98,47 +86,37 @@ export function LoginForm({ initialError, nextPath }: Props) {
 
   async function onMagicSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setMagicStatus("loading");
     setMessage("");
+    const trimmed = email.trim().toLowerCase();
+    if (!trimmed) {
+      setMagicStatus("error");
+      setMessage("Enter your email address.");
+      return;
+    }
+
+    setMagicStatus("loading");
 
     try {
-      const res = await fetch(`${window.location.origin}/api/auth/otp`, {
+      const res = await fetch("/api/auth/otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          email: email.trim().toLowerCase(),
-          next: nextPath,
-        }),
+        body: JSON.stringify({ email: trimmed, next: nextPath }),
       });
-      const raw = await res.text();
-      let data: { ok?: boolean; error?: string } = {};
-      try {
-        data = raw ? JSON.parse(raw) : {};
-      } catch {
-        setMagicStatus("error");
-        setMessage("Bad response from server.");
-        return;
-      }
+
+      const data = (await res.json().catch(() => ({}))) as {
+        ok?: boolean;
+        error?: string;
+      };
 
       if (!res.ok || !data.ok) {
         setMagicStatus("error");
-        let hint = data.error ?? "Could not send link.";
-        if (/captcha|security|verify/i.test(hint)) {
-          hint +=
-            " — In Supabase: turn off CAPTCHA for email or configure it.";
-        }
-        if (/redirect|url/i.test(hint)) {
-          hint +=
-            " — Add your site URL + /auth/callback under Supabase Redirect URLs.";
-        }
-        setMessage(hint);
+        setMessage(data.error ?? "Could not send sign-in link.");
         return;
       }
 
       setMagicStatus("sent");
       setMessage(
-        "Check your inbox (and spam) for the magic link. Redirect URL in Supabase must include /auth/callback for this site."
+        "Check your inbox for your secure FERMORA sign-in link."
       );
     } catch {
       setMagicStatus("error");
@@ -151,28 +129,27 @@ export function LoginForm({ initialError, nextPath }: Props) {
   const showMagicSuccess = tab === "magic" && magicStatus === "sent" && message;
 
   return (
-    <div className="w-full max-w-md space-y-8 relative z-10">
-      <div className="text-center space-y-2">
-        <p className="text-xs font-semibold uppercase tracking-wider text-rose-300/90">
-          Welcome back
+    <div className="w-full max-w-md space-y-6 relative z-10">
+      <div className="text-center space-y-1.5">
+        <p className="text-xs font-semibold uppercase tracking-wider text-[#B66ACB]">
+          Welcome Back
         </p>
-        <h1 className="font-display text-3xl sm:text-4xl font-semibold text-white">
-          Log in
+        <h1 className="font-display text-3xl font-semibold text-[#101F3B]">
+          Sign in to FERMORA
         </h1>
-        <p className="text-white/45 text-sm leading-relaxed">
-          Password and magic link use the server — no Supabase keys needed in the
-          browser. New here?{" "}
+        <p className="text-[#26334A]/70 text-xs sm:text-sm leading-relaxed">
+          Access your personal cycle tracker, cravings, and journal. New here?{" "}
           <Link
             href={`/signup?next=${encodeURIComponent(nextPath)}`}
-            className="text-rose-300/90 hover:text-rose-200 font-medium transition-colors"
+            className="text-[#B66ACB] hover:text-[#9C4EB3] font-medium transition-colors underline"
           >
-            Sign up
+            Create an account
           </Link>
         </p>
       </div>
 
       <div
-        className="flex rounded-xl border border-white/10 bg-white/[0.03] p-1"
+        className="flex rounded-md border border-[#E8DFD5] bg-[#FAF7F2] p-1"
         role="tablist"
         aria-label="Sign-in method"
       >
@@ -181,10 +158,10 @@ export function LoginForm({ initialError, nextPath }: Props) {
           role="tab"
           aria-selected={tab === "password"}
           className={cn(
-            "flex-1 rounded-lg py-2.5 text-sm font-medium transition-colors",
+            "flex-1 rounded-sm py-2 text-xs font-medium transition-all duration-150 ease-out cursor-pointer active:scale-95",
             tab === "password"
-              ? "bg-white/10 text-white shadow-sm"
-              : "text-white/45 hover:text-white/70"
+              ? "bg-[#F8F3E9] text-[#101F3B] font-semibold border border-[#E8DFD5]"
+              : "text-[#26334A]/60 hover:text-[#101F3B]"
           )}
           onClick={() => {
             setTab("password");
@@ -193,7 +170,7 @@ export function LoginForm({ initialError, nextPath }: Props) {
           }}
         >
           <span className="inline-flex items-center justify-center gap-1.5">
-            <LogIn className="w-3.5 h-3.5" aria-hidden />
+            <LogInIcon size={14} aria-hidden="true" />
             Password
           </span>
         </button>
@@ -202,10 +179,10 @@ export function LoginForm({ initialError, nextPath }: Props) {
           role="tab"
           aria-selected={tab === "magic"}
           className={cn(
-            "flex-1 rounded-lg py-2.5 text-sm font-medium transition-colors",
+            "flex-1 rounded-sm py-2 text-xs font-medium transition-all duration-150 ease-out cursor-pointer active:scale-95",
             tab === "magic"
-              ? "bg-white/10 text-white shadow-sm"
-              : "text-white/45 hover:text-white/70"
+              ? "bg-[#F8F3E9] text-[#101F3B] font-semibold border border-[#E8DFD5]"
+              : "text-[#26334A]/60 hover:text-[#101F3B]"
           )}
           onClick={() => {
             setTab("magic");
@@ -215,7 +192,7 @@ export function LoginForm({ initialError, nextPath }: Props) {
           }}
         >
           <span className="inline-flex items-center justify-center gap-1.5">
-            <Mail className="w-3.5 h-3.5" aria-hidden />
+            <MailIcon size={14} aria-hidden="true" />
             Magic link
           </span>
         </button>
@@ -224,56 +201,59 @@ export function LoginForm({ initialError, nextPath }: Props) {
       {tab === "password" ? (
         <form
           onSubmit={(e) => void onPasswordSubmit(e)}
-          className="glass rounded-3xl p-8 border border-white/[0.1] space-y-5"
+          className="rounded-xl p-6 sm:p-8 bg-[#FAF7F2] border border-[#E8DFD5] space-y-4"
           noValidate
         >
-          <div className="space-y-1.5">
-            <Label htmlFor="login-email">Email</Label>
+          <div className="space-y-1">
+            <Label htmlFor="login-email">Email Address</Label>
             <Input
               id="login-email"
               type="email"
               autoComplete="email"
-              placeholder="you@college.edu.in"
+              placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               disabled={passwordStatus === "loading"}
               error={fieldErrors.email}
+              className="bg-[#F8F3E9]"
             />
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-1">
             <Label htmlFor="login-password">Password</Label>
             <Input
               id="login-password"
               type="password"
               autoComplete="current-password"
+              placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               disabled={passwordStatus === "loading"}
               error={fieldErrors.password}
+              className="bg-[#F8F3E9]"
             />
           </div>
           {showPasswordError && (
-            <p className="text-red-400 text-sm" role="alert">
+            <p className="text-red-600 text-xs font-medium" role="alert">
               {message}
             </p>
           )}
           <Button
             type="submit"
             size="lg"
-            className="w-full"
+            className="w-full bg-[#B66ACB] hover:bg-[#9C4EB3] border border-[#9C4EB3] text-white cursor-pointer mt-2"
             disabled={passwordStatus === "loading"}
           >
             {passwordStatus === "loading" ? (
               <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" aria-hidden />
-                Signing in…
+                <LoaderIcon size={16} className="mr-2" aria-hidden="true" />
+                Signing in...
               </>
             ) : (
               <>
-                <LogIn className="w-4 h-4 mr-2" aria-hidden />
-                Sign in
+                <LogInIcon size={16} className="mr-2" aria-hidden="true" />
+                Sign in to FERMORA
               </>
             )}
           </Button>
@@ -281,25 +261,26 @@ export function LoginForm({ initialError, nextPath }: Props) {
       ) : (
         <form
           onSubmit={(e) => void onMagicSubmit(e)}
-          className="glass rounded-3xl p-8 border border-white/[0.1] space-y-5"
+          className="rounded-xl p-6 sm:p-8 bg-[#FAF7F2] border border-[#E8DFD5] space-y-4"
           noValidate
         >
-          <div className="space-y-1.5">
-            <Label htmlFor="magic-email">Email</Label>
+          <div className="space-y-1">
+            <Label htmlFor="magic-email">Email Address</Label>
             <Input
               id="magic-email"
               type="email"
               autoComplete="email"
-              placeholder="you@college.edu.in"
+              placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               disabled={magicStatus === "loading" || magicStatus === "sent"}
+              className="bg-[#F8F3E9]"
             />
           </div>
           {(showMagicError || showMagicSuccess) && (
             <p
-              className={`text-sm ${showMagicError ? "text-red-400" : "text-emerald-400/90"}`}
+              className={`text-xs font-medium ${showMagicError ? "text-red-600" : "text-emerald-700"}`}
               role={showMagicError ? "alert" : "status"}
             >
               {message}
@@ -308,34 +289,44 @@ export function LoginForm({ initialError, nextPath }: Props) {
           <Button
             type="submit"
             size="lg"
-            className="w-full"
+            className="w-full bg-[#B66ACB] hover:bg-[#9C4EB3] border border-[#9C4EB3] text-white cursor-pointer mt-2"
             disabled={
               magicStatus === "loading" || magicStatus === "sent" || !email.trim()
             }
           >
             {magicStatus === "loading" ? (
               <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" aria-hidden />
-                Sending link…
+                <LoaderIcon size={16} className="mr-2" aria-hidden="true" />
+                Sending link...
               </>
             ) : magicStatus === "sent" ? (
-              "Link sent"
+              "Link Sent: Check Email"
             ) : (
               <>
-                <Mail className="w-4 h-4 mr-2" aria-hidden />
+                <MailIcon size={16} className="mr-2" aria-hidden="true" />
                 Email me a magic link
               </>
             )}
           </Button>
-          <p className="text-white/30 text-xs text-center leading-relaxed">
-            Magic link is sent from our server using your Supabase project settings.
-          </p>
         </form>
       )}
 
-      <p className="text-center text-sm text-white/40">
-        <Link href="/" className="text-rose-300/80 hover:text-rose-200 transition-colors">
-          ← Back to home
+      {/* Guest Mode Link for immediate, functional exploration */}
+      <div className="p-4 rounded-lg bg-[#FAF7F2] border border-[#E8DFD5] text-center space-y-1 text-xs">
+        <span className="text-[#26334A]/70">Want to test the platform without an account?</span>
+        <div>
+          <Link
+            href="/dashboard?guest=1"
+            className="font-semibold text-[#B66ACB] hover:text-[#9C4EB3] transition-colors"
+          >
+            Explore Dashboard as Guest →
+          </Link>
+        </div>
+      </div>
+
+      <p className="text-center text-xs text-[#26334A]/60">
+        <Link href="/" className="hover:text-[#B66ACB] transition-colors">
+          ← Return to FERMORA Home
         </Link>
       </p>
     </div>

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Loader2, Mail, UserPlus } from "lucide-react";
+import { LoaderIcon, MailIcon, UserPlusIcon } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -40,7 +40,7 @@ export function SignupForm({ nextPath }: Props) {
 
     if (!parsed.success) {
       const err: Record<string, string> = {};
-      for (const issue of parsed.error.errors) {
+      for (const issue of parsed.error.issues) {
         const k = issue.path[0];
         if (typeof k === "string" && !err[k]) err[k] = issue.message;
       }
@@ -62,122 +62,98 @@ export function SignupForm({ nextPath }: Props) {
         }),
       });
 
-      const raw = await res.text();
-      let data: { ok?: boolean; needsEmailConfirmation?: boolean; error?: string | null } =
-        {};
-      try {
-        data = raw ? JSON.parse(raw) : {};
-      } catch {
-        setStatus("error");
-        setMessage("Bad response from server. Redeploy and check Vercel logs.");
-        return;
-      }
+      const data = (await res.json().catch(() => ({}))) as {
+        ok?: boolean;
+        error?: string;
+        needsEmailConfirmation?: boolean;
+      };
 
       if (!res.ok || !data.ok) {
         setStatus("error");
-        let msg = data.error ?? "Sign up failed.";
-        if (/already registered|already been registered|exists/i.test(msg)) {
-          msg = "An account with this email already exists. Try logging in instead.";
-        }
-        setMessage(msg);
+        setMessage(data.error ?? "Sign up failed.");
         return;
       }
 
-      if (!data.needsEmailConfirmation) {
-        router.push(nextPath);
-        router.refresh();
+      if (data.needsEmailConfirmation) {
+        setStatus("verify");
         return;
       }
 
-      setVerifyError("");
-      setStatus("verify");
-      setMessage(
-        "We sent a verification link to your email. Open it to confirm your account — then you’ll continue to a few quick questions."
-      );
+      router.refresh();
+      router.push(nextPath);
     } catch {
       setStatus("error");
-      setMessage(
-        "Could not reach the server. Check your connection, or confirm the site URL / Supabase env on Vercel."
-      );
+      setMessage("Network error. Try again.");
     }
   }
 
   async function resendVerification() {
-    if (!email.trim()) return;
     setResending(true);
     setVerifyError("");
     try {
       const res = await fetch(`${window.location.origin}/api/auth/resend`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify({ email: email.trim().toLowerCase(), next: nextPath }),
       });
-      const raw = await res.text();
-      let data: { ok?: boolean; error?: string } = {};
-      try {
-        data = raw ? JSON.parse(raw) : {};
-      } catch {
-        setVerifyError("Invalid server response.");
-        setResending(false);
-        return;
-      }
+      const data = (await res.json().catch(() => ({}))) as {
+        ok?: boolean;
+        error?: string;
+      };
       if (!res.ok || !data.ok) {
-        setVerifyError(data.error ?? "Could not resend.");
-        setResending(false);
-        return;
+        setVerifyError(data.error ?? "Could not resend email.");
       }
-      setMessage(
-        "Another verification email is on its way. Check spam if you don’t see it."
-      );
     } catch {
       setVerifyError("Network error.");
+    } finally {
+      setResending(false);
     }
-    setResending(false);
   }
 
   if (status === "verify") {
     return (
-      <div className="w-full max-w-md space-y-8 relative z-10">
+      <div className="w-full max-w-md space-y-6 relative z-10">
         <div className="text-center space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-wider text-violet-300/90">
-            Check your email
+          <p className="text-xs font-semibold uppercase tracking-wider text-[#B66ACB]">
+            Email Verification
           </p>
-          <h1 className="font-display text-3xl sm:text-4xl font-semibold text-white">
-            Verify to continue
+          <h1 className="font-display text-3xl font-semibold text-[#101F3B]">
+            Check your email
           </h1>
-          <p className="text-white/50 text-sm leading-relaxed">{message}</p>
+          <p className="text-[#26334A]/70 text-xs sm:text-sm leading-relaxed">
+            We sent a secure confirmation link to complete your FERMORA registration.
+          </p>
         </div>
         {verifyError && (
-          <p className="text-red-400 text-sm text-center" role="alert">
+          <p className="text-red-600 text-xs text-center font-medium" role="alert">
             {verifyError}
           </p>
         )}
-        <div className="glass rounded-3xl p-8 border border-white/[0.1] space-y-4 text-center">
-          <div className="w-14 h-14 rounded-2xl bg-violet-500/15 border border-violet-500/25 flex items-center justify-center mx-auto">
-            <Mail className="w-7 h-7 text-violet-300" aria-hidden />
+        <div className="rounded-xl p-8 bg-[#FAF7F2] border border-[#E8DFD5] space-y-4 text-center">
+          <div className="w-12 h-12 rounded-lg bg-[#E6DDF4] flex items-center justify-center mx-auto border border-[#E8DFD5]">
+            <MailIcon size={22} className="text-[#7A3E8E]" aria-hidden="true" />
           </div>
-          <p className="text-white/40 text-sm">
-            Sent to <span className="text-white/70">{email}</span>
+          <p className="text-[#26334A]/70 text-xs">
+            Sent to <span className="font-semibold text-[#101F3B]">{email}</span>
           </p>
           <Button
             type="button"
             variant="outline"
-            className="w-full"
+            className="w-full border-[#E8DFD5] text-[#101F3B] hover:bg-[#F8F3E9] cursor-pointer"
             disabled={resending}
             onClick={() => void resendVerification()}
           >
             {resending ? (
               <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" aria-hidden />
-                Sending…
+                <LoaderIcon size={15} className="mr-2" aria-hidden="true" />
+                Sending...
               </>
             ) : (
-              "Resend verification email"
+              "Resend confirmation email"
             )}
           </Button>
-          <Button asChild variant="ghost" className="w-full text-white/50">
-            <Link href="/login">Back to log in</Link>
+          <Button asChild variant="ghost" className="w-full text-xs text-[#26334A]/70">
+            <Link href="/login">Back to Sign in</Link>
           </Button>
         </div>
       </div>
@@ -185,54 +161,55 @@ export function SignupForm({ nextPath }: Props) {
   }
 
   return (
-    <div className="w-full max-w-md space-y-8 relative z-10">
-      <div className="text-center space-y-2">
-        <p className="text-xs font-semibold uppercase tracking-wider text-violet-300/90">
-          Create account
+    <div className="w-full max-w-md space-y-6 relative z-10">
+      <div className="text-center space-y-1.5">
+        <p className="text-xs font-semibold uppercase tracking-wider text-[#B66ACB]">
+          Join FERMORA
         </p>
-        <h1 className="font-display text-3xl sm:text-4xl font-semibold text-white">
-          Sign up for SakhiFi
+        <h1 className="font-display text-3xl font-semibold text-[#101F3B]">
+          Begin your journey
         </h1>
-        <p className="text-white/45 text-sm leading-relaxed">
-          Sign-up runs on our server (works even if the browser can’t read Supabase
-          keys). Verify your email when asked, then finish onboarding.
+        <p className="text-[#26334A]/70 text-xs sm:text-sm leading-relaxed">
+          Create your private wellness profile. Understand your body&apos;s natural rhythm.
         </p>
       </div>
 
       <form
         onSubmit={onSubmit}
-        className="glass rounded-3xl p-8 border border-white/[0.1] space-y-4"
+        className="rounded-xl p-6 sm:p-8 bg-[#FAF7F2] border border-[#E8DFD5] space-y-3.5"
         noValidate
       >
-        <div className="space-y-1.5">
-          <Label htmlFor="signup-name">Name (optional)</Label>
+        <div className="space-y-1">
+          <Label htmlFor="signup-name">Your Name</Label>
           <Input
             id="signup-name"
             autoComplete="name"
-            placeholder="Ananya Sharma"
+            placeholder="e.g. Elena"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
             disabled={status === "loading"}
             error={fieldErrors.fullName}
+            className="bg-[#F8F3E9]"
           />
         </div>
 
-        <div className="space-y-1.5">
-          <Label htmlFor="signup-email">Email</Label>
+        <div className="space-y-1">
+          <Label htmlFor="signup-email">Email Address</Label>
           <Input
             id="signup-email"
             type="email"
             autoComplete="email"
-            placeholder="you@college.edu.in"
+            placeholder="you@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
             disabled={status === "loading"}
             error={fieldErrors.email}
+            className="bg-[#F8F3E9]"
           />
         </div>
 
-        <div className="space-y-1.5">
+        <div className="space-y-1">
           <Label htmlFor="signup-password">Password</Label>
           <Input
             id="signup-password"
@@ -244,25 +221,28 @@ export function SignupForm({ nextPath }: Props) {
             required
             disabled={status === "loading"}
             error={fieldErrors.password}
+            className="bg-[#F8F3E9]"
           />
         </div>
 
-        <div className="space-y-1.5">
-          <Label htmlFor="signup-confirm">Confirm password</Label>
+        <div className="space-y-1">
+          <Label htmlFor="signup-confirm">Confirm Password</Label>
           <Input
             id="signup-confirm"
             type="password"
             autoComplete="new-password"
+            placeholder="Repeat password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
             disabled={status === "loading"}
             error={fieldErrors.confirmPassword}
+            className="bg-[#F8F3E9]"
           />
         </div>
 
-        {message && status === "error" && (
-          <p className="text-red-400 text-sm" role="alert">
+        {status === "error" && message && (
+          <p className="text-red-600 text-xs font-medium" role="alert">
             {message}
           </p>
         )}
@@ -270,42 +250,49 @@ export function SignupForm({ nextPath }: Props) {
         <Button
           type="submit"
           size="lg"
-          className="w-full"
+          className="w-full bg-[#B66ACB] hover:bg-[#9C4EB3] border border-[#9C4EB3] text-white cursor-pointer mt-2"
           disabled={status === "loading"}
         >
           {status === "loading" ? (
             <>
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" aria-hidden />
-              Creating account…
+              <LoaderIcon size={16} className="mr-2" aria-hidden="true" />
+              Creating your space...
             </>
           ) : (
             <>
-              <UserPlus className="w-4 h-4 mr-2" aria-hidden />
-              Sign up & verify email
+              <UserPlusIcon size={16} className="mr-2" aria-hidden="true" />
+              Create Account
             </>
           )}
         </Button>
-
-        <p className="text-white/30 text-xs text-center leading-relaxed">
-          Add your Vercel URL + <code className="text-white/45">/auth/callback</code>{" "}
-          in Supabase → Authentication → Redirect URLs. Optional: set{" "}
-          <code className="text-white/45">SITE_URL</code> on Vercel for email links.
-        </p>
       </form>
 
-      <p className="text-center text-sm text-white/45">
+      {/* Guest Mode option */}
+      <div className="p-3.5 rounded-lg bg-[#FAF7F2] border border-[#E8DFD5] text-center space-y-1 text-xs">
+        <span className="text-[#26334A]/70">Testing the experience?</span>
+        <div>
+          <Link
+            href="/dashboard?guest=1"
+            className="font-semibold text-[#B66ACB] hover:text-[#9C4EB3] transition-colors"
+          >
+            Explore Dashboard as Guest →
+          </Link>
+        </div>
+      </div>
+
+      <p className="text-center text-xs text-[#26334A]/70">
         Already have an account?{" "}
         <Link
           href={`/login?next=${encodeURIComponent(nextPath)}`}
-          className="text-rose-300/90 hover:text-rose-200 transition-colors font-medium"
+          className="text-[#B66ACB] font-medium hover:underline"
         >
-          Log in
+          Sign in
         </Link>
       </p>
 
-      <p className="text-center text-sm text-white/40">
-        <Link href="/" className="text-white/50 hover:text-white/70 transition-colors">
-          ← Back to home
+      <p className="text-center text-xs text-[#26334A]/60">
+        <Link href="/" className="hover:text-[#B66ACB] transition-colors">
+          ← Return to FERMORA Home
         </Link>
       </p>
     </div>

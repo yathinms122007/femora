@@ -29,7 +29,7 @@ export function foodIdeasForCravings(
 ): string[] {
   if (!cravingIds?.length) {
     return [
-      "Balanced plate: dal + rice/roti + sabzi — cheap and steady energy.",
+      "Balanced plate: dal + rice/roti + sabzi  -  cheap and steady energy.",
       "Seasonal fruit from a local vendor instead of packaged sweets.",
     ];
   }
@@ -42,12 +42,12 @@ export function foodIdeasForCravings(
     }
     if (c === "salty") {
       out.push(
-        "Salty crunch: roasted makhana or roasted chana — bulk packs last longer."
+        "Salty crunch: roasted makhana or roasted chana  -  bulk packs last longer."
       );
     }
     if (c === "comfort_food") {
       out.push(
-        "Comfort: khichdi with extra veggies, or curd rice — filling and gentle."
+        "Comfort: khichdi with extra veggies, or curd rice  -  filling and gentle."
       );
     }
     if (c === "caffeine") {
@@ -67,7 +67,7 @@ export function foodIdeasForCravings(
   return [...new Set(out)].slice(0, 5);
 }
 
-/** Simple educational SIP suggestion — not financial advice */
+/** Simple educational SIP suggestion  -  not financial advice */
 export function suggestMonthlySipInr(
   salaryMonthly: number,
   goal: "emergency" | "growth" | "short_term"

@@ -1,6 +1,6 @@
 export type BudgetEntryType = "expense" | "income";
 
-/** Expense categories — keep in sync with budget-schema + UI */
+/** Expense categories  -  keep in sync with budget-schema + UI */
 export type ExpenseCategory =
   | "food"
   | "transport"

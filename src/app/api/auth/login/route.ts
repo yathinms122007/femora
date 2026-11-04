@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
   const parsed = bodySchema.safeParse(json);
   if (!parsed.success) {
     return NextResponse.json(
-      { ok: false, error: parsed.error.errors[0]?.message ?? "Invalid input" },
+      { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid input" },
       { status: 422 }
     );
   }

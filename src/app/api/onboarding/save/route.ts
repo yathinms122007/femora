@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
   const parsed = onboardingSaveBodySchema.safeParse(json);
   if (!parsed.success) {
     return NextResponse.json(
-      { ok: false, error: parsed.error.errors[0]?.message ?? "Invalid data" },
+      { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid data" },
       { status: 422 }
     );
   }
@@ -162,15 +162,15 @@ function buildPlanSummary(p: {
     `Monthly money in hand (₹${p.salary.toLocaleString("en-IN")}): keep an emergency buffer before locking money in long-term funds.`
   );
   lines.push(
-    `You chose SIP ₹${p.sipChosen.toLocaleString("en-IN")}/mo; a rule-of-thumb for ${p.goal} goals was around ₹${p.recommendedSip.toLocaleString("en-IN")}/mo — ${p.sipNote}`
+    `You chose SIP ₹${p.sipChosen.toLocaleString("en-IN")}/mo; a rule-of-thumb for ${p.goal} goals was around ₹${p.recommendedSip.toLocaleString("en-IN")}/mo  -  ${p.sipNote}`
   );
   if (p.nextPeriod) {
     lines.push(
-      `Estimated next period start (approx.): ${p.nextPeriod} — plan lighter spend days before if you like.`
+      `Estimated next period start (approx.): ${p.nextPeriod}  -  plan lighter spend days before if you like.`
     );
   }
   lines.push(
-    "This is educational, not investment advice — talk to a SEBI-registered advisor for personal suitability."
+    "This is educational, not investment advice  -  talk to a SEBI-registered advisor for personal suitability."
   );
   return lines.join("\n\n");
 }

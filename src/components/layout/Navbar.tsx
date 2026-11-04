@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { MenuIcon, CloseIcon } from "@/components/ui/icons";
 import { NAV_ITEMS, SITE_CONFIG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { NavAuthButtons } from "@/components/layout/NavAuthButtons";
@@ -14,7 +14,7 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
+    const handleScroll = () => setScrolled(window.scrollY > 15);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -22,38 +22,50 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
+        "fixed top-0 left-0 right-0 z-50 transition-colors duration-200",
         scrolled
-          ? "bg-obsidian-DEFAULT/80 backdrop-blur-xl border-b border-white/[0.06]"
-          : "bg-transparent"
+          ? "bg-[#F8F3E9] border-b border-[#E8DFD5]"
+          : "bg-[#F8F3E9]/95 border-b border-transparent"
       )}
     >
       <nav
-        className="container-max section-padding flex items-center justify-between h-16 sm:h-18"
+        className="container-max section-padding flex items-center justify-between h-18 sm:h-20"
         aria-label="Main navigation"
       >
-        {/* Logo */}
+        {/* Brand with official logo symbol */}
         <Link
           href="/"
-          className="font-display text-xl font-bold text-gradient-rose hover:opacity-80 transition-opacity"
+          className="flex items-center gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B66ACB]"
         >
-          {SITE_CONFIG.name}
+          <div className="relative w-8 h-10 flex-shrink-0">
+            <Image
+              src="/images/femora.logo.png"
+              alt="FERMORA Logo"
+              width={32}
+              height={39}
+              className="object-contain w-full h-full"
+              priority
+            />
+          </div>
+          <span className="font-display text-2xl font-semibold tracking-wider text-[#101F3B] hover:text-[#B66ACB] transition-colors">
+            {SITE_CONFIG.name}
+          </span>
         </Link>
 
-        {/* Desktop nav */}
+        {/* Desktop nav links */}
         <div className="hidden lg:flex items-center gap-1">
           {NAV_ITEMS.map((item) => (
             <a
               key={item.href}
               href={item.href}
-              className="px-4 py-2 text-sm text-white/60 hover:text-white transition-colors rounded-lg hover:bg-white/5"
+              className="px-3.5 py-2 text-sm font-medium text-[#26334A] hover:text-[#B66ACB] transition-all duration-150 ease-out hover:-translate-y-0.5 active:translate-y-0 active:scale-95 rounded-md hover:bg-[#E6DDF4]/40"
             >
               {item.label}
             </a>
           ))}
         </div>
 
-        {/* Desktop CTA */}
+        {/* Desktop Auth */}
         <div className="hidden lg:flex items-center gap-2">
           <NavAuthButtons />
         </div>
@@ -61,23 +73,23 @@ export function Navbar() {
         {/* Mobile menu button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="lg:hidden p-2 rounded-lg hover:bg-white/5 text-white/70 hover:text-white transition-colors"
+          className="lg:hidden p-2 rounded-md text-[#101F3B] hover:bg-[#E6DDF4]/40 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B66ACB]"
           aria-label={isOpen ? "Close menu" : "Open menu"}
           aria-expanded={isOpen}
         >
-          {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          {isOpen ? <CloseIcon size={22} /> : <MenuIcon size={22} />}
         </button>
       </nav>
 
-      {/* Mobile menu */}
+      {/* Mobile drawer */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-            className="lg:hidden overflow-hidden bg-obsidian-DEFAULT/95 backdrop-blur-xl border-b border-white/[0.06]"
+            transition={{ duration: 0.2, ease: "easeInOut" }}
+            className="lg:hidden overflow-hidden bg-[#F8F3E9] border-b border-[#E8DFD5]"
           >
             <div className="section-padding py-6 space-y-1">
               {NAV_ITEMS.map((item) => (
@@ -85,12 +97,33 @@ export function Navbar() {
                   key={item.href}
                   href={item.href}
                   onClick={() => setIsOpen(false)}
-                  className="block px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-xl transition-all text-sm"
+                  className="block px-4 py-3 text-base font-medium text-[#101F3B] hover:text-[#B66ACB] hover:bg-[#E6DDF4]/40 rounded-md transition-colors"
                 >
                   {item.label}
                 </a>
               ))}
-              <NavAuthButtons mobile onClickLink={() => setIsOpen(false)} />
+
+              <div className="pt-2 pb-2 border-t border-[#E8DFD5]/60 flex items-center gap-4 px-4 text-xs text-[#26334A]/70">
+                <Link
+                  href="/terms"
+                  onClick={() => setIsOpen(false)}
+                  className="hover:text-[#B66ACB] transition-colors"
+                >
+                  Terms
+                </Link>
+                <span>·</span>
+                <Link
+                  href="/privacy"
+                  onClick={() => setIsOpen(false)}
+                  className="hover:text-[#B66ACB] transition-colors"
+                >
+                  Privacy
+                </Link>
+              </div>
+
+              <div className="pt-3 border-t border-[#E8DFD5]/70">
+                <NavAuthButtons mobile onClickLink={() => setIsOpen(false)} />
+              </div>
             </div>
           </motion.div>
         )}

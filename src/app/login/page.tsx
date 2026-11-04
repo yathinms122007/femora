@@ -9,17 +9,17 @@ export const metadata: Metadata = {
 };
 
 type Props = {
-  searchParams: Record<string, string | string[] | undefined>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
-export default function LoginPage({ searchParams }: Props) {
-  const err =
-    typeof searchParams.error === "string" ? searchParams.error : undefined;
-  const nextRaw = searchParams.next;
+export default async function LoginPage({ searchParams }: Props) {
+  const sp = await searchParams;
+  const err = typeof sp?.error === "string" ? sp.error : undefined;
+  const nextRaw = sp?.next;
   const nextPath =
     typeof nextRaw === "string" && nextRaw.startsWith("/") && !nextRaw.startsWith("//")
       ? nextRaw
-      : "/onboarding";
+      : "/dashboard";
 
   return (
     <AuthPageChrome variant="rose">

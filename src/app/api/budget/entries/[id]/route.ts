@@ -13,7 +13,7 @@ const UUID_RE =
 
 export async function DELETE(
   request: NextRequest,
-  context: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   const { url, key } = getSupabasePublicEnv();
   if (!isValidSupabaseEnv(url, key)) {
@@ -23,7 +23,8 @@ export async function DELETE(
     );
   }
 
-  const id = context.params.id?.trim() ?? "";
+  const { id: rawId } = await context.params;
+  const id = rawId?.trim() ?? "";
   if (!UUID_RE.test(id)) {
     return NextResponse.json({ ok: false, error: "Invalid entry id." }, { status: 422 });
   }
@@ -50,20 +51,22 @@ export async function DELETE(
     .select("id");
 
   if (error) {
-    console.error("[budget/entries DELETE]", error.message);
     return NextResponse.json(
-      { ok: false, error: "Could not delete entry." },
-      { status: 500 }
+      { ok: false, error: error.message },
+      { status: 400 }
     );
   }
 
   if (!data?.length) {
-    return NextResponse.json({ ok: false, error: "Entry not found." }, { status: 404 });
+    return NextResponse.json(
+      { ok: false, error: "Entry not found or already deleted." },
+      { status: 404 }
+    );
   }
 
-  const res = NextResponse.json({ ok: true });
-  for (const c of jar) {
-    res.cookies.set(c.name, c.value, c.options);
+  const res = NextResponse.json({ ok: true, deletedId: id });
+  for (const { name, value, options } of jar) {
+    res.cookies.set(name, value, options);
   }
   return res;
 }

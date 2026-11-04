@@ -1,17 +1,12 @@
-import { Inter } from "next/font/google";
-import localFont from "next/font/local";
+// Editorial typography variables for FERMORA
+// Body: Plus Jakarta Sans / system humanist sans-serif
+// Display: Playfair Display serif
+export const fontSans = {
+  variable: "--font-sans",
+  className: "font-sans",
+};
 
-export const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-  preload: true,
-});
-
-export const calSans = localFont({
-  src: "../../public/fonts/CalSans-SemiBold.woff2",
-  variable: "--font-cal",
-  display: "swap",
-  preload: true,
-  fallback: ["system-ui", "sans-serif"],
-});
+export const fontDisplay = {
+  variable: "--font-display",
+  className: "font-display",
+};

@@ -4,16 +4,17 @@ import { AuthPageChrome } from "@/components/auth/AuthPageChrome";
 import { SITE_CONFIG } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "Sign up",
-  description: `Create your ${SITE_CONFIG.name} account — verify email, then personalize Sakhi.`,
+  title: "Create Account",
+  description: `Join ${SITE_CONFIG.name}  -  your private women's wellness and cycle tracking space.`,
 };
 
 type Props = {
-  searchParams: Record<string, string | string[] | undefined>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
-export default function SignupPage({ searchParams }: Props) {
-  const nextRaw = searchParams.next;
+export default async function SignupPage({ searchParams }: Props) {
+  const sp = await searchParams;
+  const nextRaw = sp?.next;
   const nextPath =
     typeof nextRaw === "string" && nextRaw.startsWith("/") && !nextRaw.startsWith("//")
       ? nextRaw

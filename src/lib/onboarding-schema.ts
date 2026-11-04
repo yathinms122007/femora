@@ -58,7 +58,7 @@ const moneyComfort = z.enum([
 
 const investmentGoal = z.enum(["emergency", "growth", "short_term"]);
 
-/** Client → POST /api/onboarding/save — server adds profileComplete + computed */
+/** Client → POST /api/onboarding/save  -  server adds profileComplete + computed */
 export const onboardingSaveBodySchema = z.object({
   gender: z.enum(["female", "male", "prefer_not_to_say"]),
   female: z

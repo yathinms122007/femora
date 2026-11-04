@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircleIcon } from "@/components/ui/icons";
 
 type Props = { showWelcome: boolean };
 
@@ -26,12 +26,12 @@ export function DashboardWelcomeStrip({ showWelcome }: Props) {
   return (
     <div
       role="status"
-      className="rounded-2xl border border-emerald-500/30 bg-emerald-950/40 px-4 py-3 text-sm text-emerald-100/95 flex items-start gap-3"
+      className="rounded-lg border border-[#B66ACB]/30 bg-[#E6DDF4]/60 px-4 py-3 text-xs sm:text-sm text-[#101F3B] flex items-start gap-3"
     >
-      <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-400 mt-0.5" aria-hidden />
+      <CheckCircleIcon size={18} className="shrink-0 text-[#B66ACB] mt-0.5" aria-hidden="true" />
       <p>
-        <span className="font-semibold text-white">You&apos;re in.</span> Your plan report is below.
-        Explore every feature from here — you stay signed in until you choose Sign out.
+        <span className="font-semibold text-[#101F3B]">Welcome to your personal space.</span>{" "}
+        Your wellness logs and cycle metrics are active. Explore every module from here.
       </p>
     </div>
   );

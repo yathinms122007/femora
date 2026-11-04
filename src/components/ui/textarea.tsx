@@ -14,14 +14,14 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       <div className="relative w-full">
         <textarea
           className={cn(
-            "flex min-h-[100px] w-full rounded-xl border bg-white/5 px-4 py-3 text-sm text-white",
-            "placeholder:text-white/30 focus-visible:outline-none",
-            "focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-1 focus-visible:ring-offset-obsidian-900",
+            "flex min-h-[90px] w-full rounded-md border border-[#E8DFD5] bg-[#FAF7F2] px-3.5 py-2.5 text-xs sm:text-sm text-[#101F3B]",
+            "placeholder:text-[#26334A]/40 focus-visible:outline-none",
+            "focus-visible:ring-2 focus-visible:ring-[#B66ACB] focus-visible:ring-offset-1",
             "disabled:cursor-not-allowed disabled:opacity-50 resize-none",
-            "transition-all duration-200",
+            "transition-colors duration-150",
             error
-              ? "border-red-500/50 focus-visible:ring-red-500"
-              : "border-white/10 hover:border-white/20",
+              ? "border-red-500/80 focus-visible:ring-red-500"
+              : "border-[#E8DFD5] hover:border-[#B66ACB]/50",
             className
           )}
           ref={ref}
@@ -32,7 +32,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         {error && (
           <p
             id={`${props.id}-error`}
-            className="mt-1.5 text-xs text-red-400"
+            className="mt-1.5 text-xs text-red-600 font-medium"
             role="alert"
           >
             {error}

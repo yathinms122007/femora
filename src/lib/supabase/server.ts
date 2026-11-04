@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { getSupabasePublicEnv, isValidSupabaseEnv } from "./env";
 
-export function createClient() {
+export async function createClient() {
   const { url, key } = getSupabasePublicEnv();
   if (!isValidSupabaseEnv(url, key)) {
     throw new Error(
@@ -10,7 +10,7 @@ export function createClient() {
     );
   }
 
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
   return createServerClient(url, key, {
     cookies: {

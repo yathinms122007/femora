@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { LayoutDashboard, Loader2, LogIn, LogOut } from "lucide-react";
+import { DashboardIcon, LoaderIcon, LogInIcon, LogOutIcon } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { createBrowserSupabase } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
@@ -66,8 +66,8 @@ export function NavAuthButtons({ className, mobile, onClickLink }: Props) {
   if (!ready) {
     return (
       <div className={cn("flex items-center gap-2", className)}>
-        <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/5">
-          <Loader2 className="w-4 h-4 animate-spin text-white/40" aria-hidden />
+        <span className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-[#E8DFD5] bg-[#FAF7F2]">
+          <LoaderIcon size={16} className="text-[#B66ACB]" aria-hidden="true" />
         </span>
       </div>
     );
@@ -83,31 +83,29 @@ export function NavAuthButtons({ className, mobile, onClickLink }: Props) {
       >
         <Button
           asChild
-          variant={mobile ? "default" : "outline"}
+          variant="default"
           size={mobile ? "lg" : "sm"}
-          className={mobile ? "w-full justify-center" : "text-white/85"}
+          className={mobile ? "w-full justify-center" : "bg-[#B66ACB] text-white hover:bg-[#9C4EB3]"}
         >
           <Link href="/dashboard" onClick={onClickLink}>
-            <LayoutDashboard className="w-4 h-4 mr-1.5" aria-hidden />
+            <DashboardIcon size={15} className="mr-1.5" aria-hidden="true" />
             Dashboard
           </Link>
         </Button>
         <Button
           type="button"
-          variant={mobile ? "outline" : "ghost"}
+          variant="outline"
           size={mobile ? "lg" : "sm"}
-          className={mobile ? "w-full" : "text-white/70"}
+          className={mobile ? "w-full" : "text-[#26334A] border-[#E8DFD5] hover:bg-[#E6DDF4]/40"}
           disabled={signingOut}
           onClick={() => void signOut()}
         >
           {signingOut ? (
-            <Loader2 className="w-4 h-4 animate-spin" aria-hidden />
+            <LoaderIcon size={15} className="mr-1.5 text-[#B66ACB]" aria-hidden="true" />
           ) : (
-            <>
-              <LogOut className="w-4 h-4 mr-1.5" aria-hidden />
-              Sign out
-            </>
+            <LogOutIcon size={15} className="mr-1.5 text-[#26334A]/70" aria-hidden="true" />
           )}
+          Sign out
         </Button>
       </div>
     );
@@ -116,19 +114,33 @@ export function NavAuthButtons({ className, mobile, onClickLink }: Props) {
   return (
     <div
       className={cn(
-        mobile ? "flex flex-col gap-2 pt-4" : "flex items-center gap-2",
+        mobile ? "flex flex-col gap-2 pt-2" : "flex items-center gap-2",
         className
       )}
     >
-      <Button asChild variant="ghost" size={mobile ? "lg" : "sm"} className="text-white/70">
-        <Link href="/signup" className={mobile ? "w-full" : ""} onClick={onClickLink}>
-          Sign up
+      <Button
+        asChild
+        variant="ghost"
+        size={mobile ? "lg" : "sm"}
+        className={
+          mobile
+            ? "w-full justify-center text-[#101F3B]"
+            : "text-[#26334A] hover:text-[#101F3B] hover:bg-[#E6DDF4]/40"
+        }
+      >
+        <Link href="/login" onClick={onClickLink}>
+          <LogInIcon size={15} className="mr-1.5 text-[#B66ACB]" aria-hidden="true" />
+          Log in
         </Link>
       </Button>
-      <Button asChild size={mobile ? "lg" : "sm"} className={mobile ? "w-full" : ""}>
-        <Link href="/login" onClick={onClickLink}>
-          Log in
-          <LogIn className="w-3.5 h-3.5 ml-1.5" aria-hidden />
+      <Button
+        asChild
+        variant="default"
+        size={mobile ? "lg" : "sm"}
+        className="bg-[#B66ACB] text-white hover:bg-[#9C4EB3] border border-[#9C4EB3]"
+      >
+        <Link href="/signup" onClick={onClickLink}>
+          Get Started
         </Link>
       </Button>
     </div>

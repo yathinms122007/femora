@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
   const parsed = bodySchema.safeParse(json);
   if (!parsed.success) {
     return NextResponse.json(
-      { ok: false, error: parsed.error.errors[0]?.message ?? "Invalid input" },
+      { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid input" },
       { status: 422 }
     );
   }
@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
   }
 
   if (!error && !data.session) {
-    /* no Set-Cookie from Supabase when email confirm is on — expected */
+    /* no Set-Cookie from Supabase when email confirm is on  -  expected */
   }
 
   return res;

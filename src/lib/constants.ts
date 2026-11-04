@@ -1,419 +1,265 @@
 import type {
   NavItem,
   Feature,
-  Testimonial,
   FAQItem,
   ComparisonItem,
   UniqueFeature,
-  GamificationLevel,
-  CheckupItem,
-  StockRecommendation,
-  SIPTableRow,
-  DashboardGoal,
 } from "@/types";
 
 export const SITE_CONFIG = {
-  name: "SakhiFi",
-  tagline: "The AI Financial Coach for Students",
+  name: "FERMORA",
+  tagline: "Your body. Your patterns. Your wellness.",
   description:
-    "SakhiFi is an AI-powered financial coach built for Indian students — helping you budget smarter, avoid scams, build savings habits, and achieve financial independence.",
-  url: "https://sakhifi.com",
-  ogImage: "/images/og-image.png",
-  email: "hello@sakhifi.com",
+    "FERMORA is a premium, modern, intelligent women's wellness and menstrual health tracking platform. Understand your cycle, balance cravings, reflect mindfully, and plan life in harmony with your natural rhythm.",
+  url: "https://fermora.app",
+  ogImage: "/images/femora.logo.png",
+  logo: "/images/femora.logo.png",
+  email: "care@fermora.app",
   social: {
-    instagram: "https://instagram.com/sakhifi",
-    linkedin: "https://linkedin.com/company/sakhifi",
-    twitter: "https://twitter.com/sakhifi",
+    instagram: "https://instagram.com/fermora.wellness",
+    linkedin: "https://linkedin.com/company/fermora",
+    twitter: "https://twitter.com/fermora_health",
   },
 } as const;
 
 export const NAV_ITEMS: NavItem[] = [
-  { label: "Features", href: "#features" },
-  { label: "🌸 Wellness", href: "#period-wellness" },
-  { label: "🩺 Health", href: "#health-agent" },
-  { label: "📈 Invest", href: "#investment-advisor" },
-  { label: "Testimonials", href: "#testimonials" },
+  { label: "Menstrual Tracker", href: "#tracker" },
+  { label: "Craving Control", href: "#cravings" },
+  { label: "Health Journal", href: "#journal" },
+  { label: "Health Reminder", href: "#reminders" },
+  { label: "Period Planning", href: "#planning" },
+];
+
+export interface ModuleTileInfo {
+  id: string;
+  title: string;
+  shortDesc: string;
+  href: string;
+  accentColor: string;
+  accentName: string;
+  iconName: string;
+}
+
+export const MODULE_TILES: ModuleTileInfo[] = [
+  {
+    id: "tracker",
+    title: "Menstrual Tracker",
+    shortDesc: "Intelligent cycle tracking, phase countdowns, and symptom insights.",
+    href: "#tracker",
+    accentColor: "#B66ACB",
+    accentName: "Orchid",
+    iconName: "CalendarHeart",
+  },
+  {
+    id: "cravings",
+    title: "Craving Control",
+    shortDesc: "Mindful craving logs, root nutrient insights, and balanced wellness swaps.",
+    href: "#cravings",
+    accentColor: "#D1BDF2",
+    accentName: "Lavender",
+    iconName: "Utensils",
+  },
+  {
+    id: "journal",
+    title: "Health Journal",
+    shortDesc: "Daily reflections, mood records, energy levels, and timeline history.",
+    href: "#journal",
+    accentColor: "#F2DCE7",
+    accentName: "Blush",
+    iconName: "BookHeart",
+  },
+  {
+    id: "reminders",
+    title: "Health Reminder",
+    shortDesc: "Centralized period alerts, supplement schedules, and wellness rituals.",
+    href: "#reminders",
+    accentColor: "#B66ACB",
+    accentName: "Orchid",
+    iconName: "BellRing",
+  },
+  {
+    id: "planning",
+    title: "Period-aware Planning",
+    shortDesc: "Harmonize work, movement, and rest with your natural 4-phase rhythm.",
+    href: "#planning",
+    accentColor: "#E6DDF4",
+    accentName: "Soft Lavender",
+    iconName: "CalendarCheck",
+  },
 ];
 
 export const TRUST_STATS = [
-  { value: 50000, suffix: "+", label: "Students Onboarded" },
-  { value: 98, suffix: "%", label: "Feel More Confident" },
-  { value: 3.2, suffix: "x", label: "Better Savings Rate", decimal: true },
-  { value: 100, suffix: "%", label: "Privacy Protected" },
+  { value: 120000, suffix: "+", label: "Active Cycles Tracked" },
+  { value: 99, suffix: "%", label: "Private & Encrypted" },
+  { value: 4.9, suffix: " / 5", label: "Average App Rating", decimal: true },
+  { value: 4, suffix: " Phases", label: "Holistic Cycle Care" },
 ] as const;
 
 export const FEATURES: Feature[] = [
   {
-    id: "budgeting",
-    icon: "💰",
-    title: "AI Budgeting Coach",
+    id: "tracker",
+    icon: "calendar",
+    title: "Predictive Cycle Calendar",
     description:
-      "Sakhi learns your spending patterns and gives you a personalized monthly plan — not generic advice, but guidance built around your actual life.",
-    gradient: "from-rose-500/20 to-rose-600/5",
+      "Understand your unique cycle rhythm. View estimated phases, ovulation forecasts, and cycle history in an intuitive visual dial.",
+    gradient: "from-[#B66ACB]/20 to-[#E6DDF4]/10",
   },
   {
-    id: "scam-shield",
-    icon: "🛡️",
-    title: "Scam Shield",
+    id: "cravings",
+    icon: "cacao",
+    title: "Intuitive Craving Wisdom",
     description:
-      "AI-powered detection of financial scams targeting students. Get real-time alerts before you click, transfer, or trust the wrong person.",
-    gradient: "from-violet-500/20 to-violet-600/5",
+      "Decode what your cravings signify, from magnesium in dark chocolate to hydration cues, with balanced, non-restrictive nourishment.",
+    gradient: "from-[#D1BDF2]/25 to-[#F8F3E9]/20",
   },
   {
-    id: "goals",
-    icon: "🎯",
-    title: "Goal Planning",
+    id: "journal",
+    icon: "journal",
+    title: "Serene Wellness Journal",
     description:
-      "From emergency funds to that semester abroad — Sakhi builds an achievable savings plan with milestone tracking and gentle nudges.",
-    gradient: "from-gold-DEFAULT/20 to-gold-dark/5",
+      "A peaceful, private space to record daily reflections, mood fluctuations, energy patterns, and body sensations.",
+    gradient: "from-[#F2DCE7]/30 to-[#EBD9CC]/15",
   },
   {
-    id: "afford",
-    icon: "🤔",
-    title: '"Can I Afford This?"',
+    id: "reminders",
+    icon: "bell",
+    title: "Centralized Health Reminders",
     description:
-      "Ask Sakhi before any purchase. Get an instant, honest answer based on your budget, goals, and financial health — not judgment, just clarity.",
-    gradient: "from-rose-500/20 to-violet-500/10",
+      "Never miss a cycle preparation window, supplement dose, hydration goal, or doctor's checkup with gentle, configurable alerts.",
+    gradient: "from-[#B66ACB]/20 to-[#D1BDF2]/10",
   },
   {
-    id: "literacy",
-    icon: "📚",
-    title: "Financial Literacy",
+    id: "planning",
+    icon: "plan",
+    title: "Period-Aware Life Planning",
     description:
-      "Learn about credit scores, insurance, SIPs, and taxes through bite-sized, real-life lessons — not textbook theory.",
-    gradient: "from-violet-500/20 to-rose-500/10",
+      "Sync your calendar with your biological rhythm. Align demanding meetings with high-energy phases and protect time for deep rest.",
+    gradient: "from-[#E6DDF4]/30 to-[#B66ACB]/10",
   },
   {
     id: "privacy",
-    icon: "🔒",
-    title: "Women-First Privacy",
+    icon: "shield",
+    title: "Zero-Knowledge Data Privacy",
     description:
-      "Your financial data is never sold. Built with end-to-end encryption, no third-party data sharing, and a privacy-first architecture.",
-    gradient: "from-gold-DEFAULT/20 to-violet-500/10",
-  },
-  {
-    id: "cashback",
-    icon: "💸",
-    title: "Cashback & Savings Tips",
-    description:
-      "Sakhi finds cashback, discounts, and savings opportunities you're missing every day.",
-    gradient: "from-emerald-500/20 to-emerald-600/5",
-  },
-  {
-    id: "income",
-    icon: "💼",
-    title: "AI Income Recommender",
-    description:
-      "Tell Sakhi your skills and get personalized income opportunities — freelance, part-time, or side hustles.",
-    gradient: "from-pink-500/20 to-pink-600/5",
-  },
-  {
-    id: "nudges",
-    icon: "🔔",
-    title: "Smart Nudges",
-    description:
-      "Timely reminders, celebratory milestones, and gentle pushbacks when you're about to overspend.",
-    gradient: "from-violet-500/20 to-rose-500/10",
-  },
-  {
-    id: "period-wellness",
-    icon: "🌸",
-    title: "Period Wellness Companion",
-    description:
-      "Tracks your cycle, understands your cravings, and recommends healthy budget-friendly treats — self-care fully planned, guilt-free.",
-    gradient: "from-pink-500/20 to-rose-500/10",
-    isNew: true,
-  },
-  {
-    id: "health-agent",
-    icon: "🩺",
-    title: "Health Concern Agent",
-    description:
-      "Preventive checkup reminders, medical expense forecasts, and a personalised health-finance plan — stay healthy, stay wealthy.",
-    gradient: "from-emerald-500/20 to-teal-500/10",
-    isNew: true,
-  },
-  {
-    id: "investment-advisor",
-    icon: "📈",
-    title: "AI Investment Advisor",
-    description:
-      "SIP calculator, stock picks, mutual fund guidance — Warren Buffett-level wisdom, simplified for every student's budget.",
-    gradient: "from-amber-500/20 to-yellow-500/10",
-    isNew: true,
+      "Your reproductive health is deeply personal. FERMORA ensures end-to-end data encryption with zero third-party advertising sharing.",
+    gradient: "from-[#EBD9CC]/25 to-[#F8F3E9]/10",
   },
 ];
 
 export const HOW_IT_WORKS_STEPS = [
   {
     step: "01",
-    title: "Tell Sakhi About Yourself",
+    title: "Log Your Dates and Symptoms",
     description:
-      "Share your college, monthly allowance, existing expenses, and financial goals. Sakhi builds your personal financial profile in minutes.",
-    icon: "👤",
+      "Easily input your cycle start date, flow intensity, mood, and daily sensations in a serene, uncluttered interface.",
+    icon: "calendar",
   },
   {
     step: "02",
-    title: "Get Your Personalized Plan",
+    title: "Observe Your Patterns",
     description:
-      "Sakhi generates a smart budget, savings targets, and a scam-awareness checklist — all tailored to your life, not a template.",
-    icon: "✨",
+      "FERMORA visualizes your natural transitions across the Menstrual, Follicular, Ovulatory, and Luteal phases.",
+    icon: "chart",
   },
   {
     step: "03",
-    title: "Chat, Ask, Decide",
+    title: "Nourish Mindfully",
     description:
-      "Ask anything anytime. \"Is this UPI link safe?\" \"Can I buy these shoes?\" \"How do I start a SIP?\" Sakhi answers with context and care.",
-    icon: "💬",
+      "Receive gentle suggestions for cravings, hydration, rest, and supplements tailored to where your body is today.",
+    icon: "nourish",
   },
   {
     step: "04",
-    title: "Watch Your Financial Health Grow",
+    title: "Plan in Harmony",
     description:
-      "Track progress toward goals, celebrate milestones, and build the money habits that will serve you for life — starting now.",
-    icon: "📈",
-  },
-];
-
-export const TESTIMONIALS: Testimonial[] = [
-  {
-    id: "1",
-    name: "Ananya Sharma",
-    role: "3rd Year, B.Tech CSE",
-    college: "IIT Delhi",
-    quote:
-      "SakhiFi helped me save ₹18,000 in three months without feeling deprived. The scam alerts alone saved me from a fake internship scheme.",
-    avatar: "AS",
-    rating: 5,
-  },
-  {
-    id: "2",
-    name: "Priya Nair",
-    role: "MBA Student",
-    college: "IIM Bangalore",
-    quote:
-      "I finally understand where my money goes. Sakhi is like a financially savvy best friend who never judges you for buying that coffee.",
-    avatar: "PN",
-    rating: 5,
-  },
-  {
-    id: "3",
-    name: "Meera Patel",
-    role: "2nd Year, B.Com",
-    college: "SRCC Delhi",
-    quote:
-      "The 'Can I afford this?' feature is everything. I use it before every purchase now. It's changed how I think about money completely.",
-    avatar: "MP",
-    rating: 5,
-  },
-  {
-    id: "4",
-    name: "Riya Krishnan",
-    role: "Final Year, MBBS",
-    college: "AIIMS Jodhpur",
-    quote:
-      "As a medical student with almost no time, Sakhi automates my financial planning. The privacy features give me peace of mind too.",
-    avatar: "RK",
-    rating: 5,
+      "Design your personal and professional schedule to flow with your natural energy waves rather than fighting against them.",
+    icon: "harmony",
   },
 ];
 
 export const FAQ_ITEMS: FAQItem[] = [
   {
-    question: "Is SakhiFi only for women?",
+    question: "What is FERMORA and how does it help me?",
     answer:
-      "SakhiFi is built with women students as the primary audience, with safety and privacy features designed around their specific needs. However, any student can use and benefit from the platform.",
+      "FERMORA is a premium women's wellness companion designed to give you clarity on your menstrual cycle, daily energy fluctuations, cravings, and reminders. It provides a peaceful, unified space to track your symptoms and plan your life in tune with your body.",
   },
   {
-    question: "How does Sakhi protect my financial data?",
+    question: "How does FERMORA protect my personal health data?",
     answer:
-      "Your data is encrypted at rest and in transit. We never sell your data to third parties, never share with advertisers, and you can delete your account and all associated data at any time. We follow data minimization principles — we only collect what we need.",
+      "Your health information is sacred. FERMORA adheres to strict privacy-by-design standards: your data is encrypted, never sold to third-party data brokers or advertisers, and completely under your control.",
   },
   {
-    question: "Is SakhiFi free?",
+    question: "Are the cycle forecasts medical diagnoses?",
     answer:
-      "We'll offer a generous free tier for students, with premium features available at a student-friendly price. Early accounts may receive extended free access as a thank-you.",
+      "No. FERMORA's forecasts are educational estimates calculated using standard biological rhythms and your historical entries. We clearly distinguish user records from estimates and advise consulting a healthcare professional for clinical concerns.",
   },
   {
-    question: "How does the Scam Shield work?",
+    question: "Can I use FERMORA if my cycles are irregular?",
     answer:
-      "Our AI is trained on thousands of known financial scam patterns targeting students in India — from fake UPI requests to fraudulent job offers to scholarship scams. Paste any message or link and Sakhi analyzes it in seconds.",
+      "Yes. FERMORA accommodates irregular and fluctuating cycles. As you log more entries, you can observe symptom patterns and customize your reminders without rigid 28-day assumptions.",
   },
   {
-    question: "Will SakhiFi work with my college's financial systems?",
+    question: "What makes the Craving Control module unique?",
     answer:
-      "We're building integrations with major banking apps and UPI platforms. You can also manually input transactions, and our AI still learns your patterns effectively.",
-  },
-  {
-    question: "When will SakhiFi launch?",
-    answer:
-      "We're rolling out access in waves, starting with select college campuses. Create an account with email to get in line and complete your profile.",
+      "Instead of restrictive dieting or guilt, FERMORA decodes what your body actually seeks, such as magnesium, zinc, or emotional warmth, and suggests delicious, nutrient-dense alternatives alongside balanced treats.",
   },
 ];
 
 export const COMPARISON_ITEMS: ComparisonItem[] = [
-  { feature: "Built specifically for students", sakhifi: true, others: false },
-  { feature: "Women-first privacy design", sakhifi: true, others: false },
-  { feature: "Scam detection & alerts", sakhifi: true, others: false },
-  { feature: "AI conversation (ask anything)", sakhifi: true, others: false },
-  { feature: '"Can I afford this?" assistant', sakhifi: true, others: false },
-  { feature: "Indian context (UPI, SIP, INR)", sakhifi: true, others: false },
-  { feature: "Zero data selling", sakhifi: true, others: "Varies" },
-  { feature: "Financial literacy lessons", sakhifi: true, others: "Limited" },
-];
-
-export const SCAM_TYPES = [
-  { icon: "📱", title: "Fake UPI Requests", description: "QR codes and payment links designed to drain your account" },
-  { icon: "💼", title: "Fake Internship Offers", description: "Lucrative job offers that ask for registration fees upfront" },
-  { icon: "🏦", title: "KYC Fraud", description: "Fake bank representatives asking to verify account details" },
-  { icon: "🎓", title: "Scholarship Scams", description: "Too-good-to-be-true scholarships that harvest your personal data" },
-  { icon: "💰", title: "Loan Trap Apps", description: "Predatory lending apps with hidden charges and data theft" },
-  { icon: "🎰", title: "Investment Fraud", description: "Fake trading schemes promising guaranteed returns" },
+  { feature: "Clean, non-pink feminine wellness aesthetic", sakhifi: true, others: false },
+  { feature: "Integrated Craving Control and root nutrient suggestions", sakhifi: true, others: false },
+  { feature: "Cycle-aware 4-phase personal activity planning", sakhifi: true, others: false },
+  { feature: "Health journal with mood and energy correlation", sakhifi: true, others: "Limited" },
+  { feature: "Centralized medication, appointment and cycle reminders", sakhifi: true, others: "Limited" },
+  { feature: "Zero third-party advertising data sharing", sakhifi: true, others: "Varies" },
+  { feature: "Clear distinction between user logs and estimated predictions", sakhifi: true, others: false },
 ];
 
 export const UNIQUE_FEATURES: UniqueFeature[] = [
   {
-    icon: "🧬",
-    title: "Financial Personality Analysis",
+    icon: "moon",
+    title: "4-Phase Chronobiology",
     description:
-      "Sakhi learns your money patterns and assigns you a financial personality — Saver, Spender, Planner, or Investor — then customizes every suggestion to match.",
-    tag: "Proprietary AI Model",
+      "Deep alignment with Menstrual, Follicular, Ovulatory, and Luteal phases to maximize productivity and self-compassion.",
+    tag: "Science-Backed",
   },
   {
-    icon: "👩",
-    title: "Women Financial Safety Mode",
+    icon: "shield",
+    title: "Sovereign Health Privacy",
     description:
-      "A dedicated protection layer that monitors for financial abuse patterns, coercive payment requests, and unsafe financial relationships — designed for women's safety.",
-    tag: "India-First Feature",
+      "Designed with zero-knowledge encryption principles. Your reproductive history belongs strictly to you.",
+    tag: "Privacy First",
   },
   {
-    icon: "🔍",
-    title: "Scam Risk Detection Engine",
+    icon: "nourish",
+    title: "Intuitive Nourishment",
     description:
-      "Our ML engine trained on 10,000+ Indian scam patterns. Detects fake job offers, UPI fraud, phishing, and Ponzi schemes before you fall victim.",
-    tag: "98.4% Accuracy",
+      "Harmonize cravings with real bodily needs through magnesium-rich, anti-inflammatory food pairings.",
+    tag: "Holistic Health",
   },
   {
-    icon: "💡",
-    title: "Personalized Income Opportunities",
+    icon: "calendar",
+    title: "Rhythm-Aware Scheduling",
     description:
-      "Based on your skills, schedule, and location, Sakhi recommends exactly how to earn more — from content creation to tutoring to micro-gigs.",
-    tag: "Skill-Matched",
-  },
-  {
-    icon: "🎮",
-    title: "Gamified Financial Growth",
-    description:
-      "XP points, streaks, badges, and a progression system that makes managing money genuinely fun. Level up from Student to Independent to Investor.",
-    tag: "10x Engagement",
+      "Intelligently align creative brainstorming, movement, and gentle restorative evenings.",
+    tag: "Life Sync",
   },
 ];
 
-export const GAMIFICATION_LEVELS: GamificationLevel[] = [
-  {
-    badge: "🌱",
-    name: "Student",
-    xpRange: "0 — 500 XP",
-    perks: ["Basic budgeting tools", "Daily financial tips", "Community access"],
-  },
-  {
-    badge: "💰",
-    name: "Saver",
-    xpRange: "500 — 2K XP",
-    perks: ["Goal tracking unlocked", "Savings challenges", "Custom badges"],
-  },
-  {
-    badge: "⚡",
-    name: "Achiever",
-    xpRange: "2K — 5K XP",
-    perks: ["Advanced analytics", "Priority AI responses", "Investment basics"],
-    active: true,
-  },
-  {
-    badge: "📈",
-    name: "Investor",
-    xpRange: "5K — 15K XP",
-    perks: ["Stock recommendations", "SIP optimizer", "Portfolio tracking"],
-  },
-  {
-    badge: "👑",
-    name: "Independent",
-    xpRange: "15K+ XP",
-    perks: ["Full platform access", "Mentor status", "Exclusive features"],
-  },
+export const DASHBOARD_GOALS = [
+  { name: "Cycle Awareness", progress: 85 },
+  { name: "Hydration Balance", progress: 90 },
+  { name: "Restorative Rituals", progress: 75 },
 ];
 
-export const CHECKUP_ITEMS: CheckupItem[] = [
-  {
-    icon: "🩸",
-    colorClass: "green",
-    name: "Complete Blood Count",
-    frequency: "Yearly",
-    cost: "₹400-800",
-    prevents: "Anaemia, infections",
-    description: "Essential baseline test. Detects anaemia (common in students), infections, and nutritional deficiencies early.",
-  },
-  {
-    icon: "🦷",
-    colorClass: "blue",
-    name: "Dental Checkup",
-    frequency: "Every 6 months",
-    cost: "₹300-500",
-    prevents: "Cavities, gum disease",
-    description: "Preventive dental care costs 10x less than treatment. Catches cavities before they become root canals.",
-  },
-  {
-    icon: "👁️",
-    colorClass: "orange",
-    name: "Eye Examination",
-    frequency: "Yearly",
-    cost: "₹200-400",
-    prevents: "Vision problems",
-    description: "Screen time damage is real. Annual exams catch digital eye strain and prescription changes early.",
-  },
-  {
-    icon: "🫀",
-    colorClass: "rose",
-    name: "Thyroid & Vitamin Panel",
-    frequency: "Yearly",
-    cost: "₹600-1200",
-    prevents: "Fatigue, weight issues",
-    description: "Thyroid disorders and Vitamin D/B12 deficiency are extremely common in young Indians. Early detection = easy management.",
-  },
-  {
-    icon: "🧠",
-    colorClass: "purple",
-    name: "Mental Health Check-in",
-    frequency: "As needed",
-    cost: "₹500-1500",
-    prevents: "Burnout, anxiety",
-    description: "Student life is stressful. Regular mental health check-ins help you build resilience and catch burnout early.",
-  },
+export const GAMIFICATION_LEVELS = [
+  { badge: "01", name: "Awareness", xpRange: "0 - 500 XP", perks: ["Cycle logging", "Phase tips"] },
+  { badge: "02", name: "In Tune", xpRange: "500 - 2K XP", perks: ["Craving insights", "Reminders"] },
+  { badge: "03", name: "Synchronized", xpRange: "2K - 5K XP", perks: ["Full planning", "Journal trends"], active: true },
 ];
 
-export const SIP_TABLE_DATA: SIPTableRow[] = [
-  { monthly: "₹500", years: "5 yrs", invested: "₹30,000", returns: "₹41,200" },
-  { monthly: "₹1,000", years: "10 yrs", invested: "₹1,20,000", returns: "₹2,32,000" },
-  { monthly: "₹2,000", years: "15 yrs", invested: "₹3,60,000", returns: "₹10,14,000", highlight: true },
-  { monthly: "₹5,000", years: "20 yrs", invested: "₹12,00,000", returns: "₹49,95,000" },
-];
-
-export const STOCK_RECOMMENDATIONS: StockRecommendation[] = [
-  { logo: "N", logoBg: "bg-blue-600", name: "Nifty 50 Index", type: "Index Fund", change: "+14.2%", changeDir: "up", tag: "Low Risk" },
-  { logo: "P", logoBg: "bg-violet-600", name: "PPFAS Flexi Cap", type: "Mutual Fund", change: "+18.7%", changeDir: "up", tag: "Moderate" },
-  { logo: "H", logoBg: "bg-rose-600", name: "HDFC Small Cap", type: "Mutual Fund", change: "+22.1%", changeDir: "up", tag: "High Growth" },
-  { logo: "S", logoBg: "bg-emerald-600", name: "SBI Blue Chip", type: "Large Cap", change: "+12.4%", changeDir: "up", tag: "Stable" },
-];
-
-export const DASHBOARD_GOALS: DashboardGoal[] = [
-  { emoji: "💻", name: "Laptop Fund", progress: 68 },
-  { emoji: "✈️", name: "Goa Trip", progress: 35 },
-  { emoji: "📦", name: "Emergency Fund", progress: 52 },
-];
-
-export const INVESTMENT_TIMELINE = [
-  { age: "Age 18-22", width: "25%", color: "from-amber-500 to-amber-400", text: "₹500/mo", value: "₹41K" },
-  { age: "Age 22-28", width: "45%", color: "from-amber-400 to-emerald-400", text: "₹2,000/mo", value: "₹3.2L" },
-  { age: "Age 28-35", width: "70%", color: "from-emerald-400 to-teal-400", text: "₹5,000/mo", value: "₹18L" },
-  { age: "Age 35-45", width: "95%", color: "from-teal-400 to-cyan-400", text: "₹10,000/mo", value: "₹72L" },
+export const CHECKUP_ITEMS = [
+  { icon: "iron", colorClass: "rose", name: "Complete Iron & CBC Panel", frequency: "Yearly", cost: "Standard", prevents: "Fatigue & Anaemia", description: "Essential baseline test for women's reproductive vitality." },
+  { icon: "stethoscope", colorClass: "purple", name: "Gynecological Wellness Visit", frequency: "Yearly", cost: "Consultation", prevents: "Reproductive issues", description: "Routine preventative exam and pelvic ultrasound review." },
+  { icon: "panel", colorClass: "green", name: "Thyroid & Vitamin D3/B12", frequency: "Yearly", cost: "Standard", prevents: "Hormonal fatigue", description: "Crucial for hormonal balance and cycle regularity." },
 ];

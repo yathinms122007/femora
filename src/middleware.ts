@@ -32,7 +32,7 @@ export async function middleware(request: NextRequest) {
   return supabaseResponse;
 }
 
-/* Skip API routes — running Supabase session refresh on every /api/* call can break
+/* Skip API routes  -  running Supabase session refresh on every /api/* call can break
  * POST handlers on Vercel and cause the browser to show "Failed to fetch". */
 export const config = {
   matcher: [

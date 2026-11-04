@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Sparkles } from "lucide-react";
+import { LoaderIcon, ArrowRightIcon } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -285,13 +285,13 @@ export function OnboardingChat() {
               className="space-y-5 flex-1 flex flex-col"
             >
               {bubble(
-                "Hi — I'm Sakhi. We’ll tune wellness and money habits to you — including optional cycle-aware tips. Nothing here replaces medical or investment advice.",
+                "Hi  -  I'm Sakhi. We’ll tune wellness and money habits to you  -  including optional cycle-aware tips. Nothing here replaces medical or investment advice.",
                 true
               )}
               <div className="flex-1" />
               <Button size="lg" className="w-full" onClick={() => setStep("gender")}>
                 Let&apos;s go
-                <Sparkles className="w-4 h-4 ml-2" aria-hidden />
+                <ArrowRightIcon size={16} className="ml-2" aria-hidden="true" />
               </Button>
             </motion.div>
           )}
@@ -429,13 +429,13 @@ export function OnboardingChat() {
 
           {step === "last_period" && (
             <motion.div key="lp" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-4">
-              {bubble("When did your last period start? (approximate first day — helps estimate your next one.)", true)}
+              {bubble("When did your last period start? (approximate first day  -  helps estimate your next one.)", true)}
               <div className="space-y-1.5">
                 <Label htmlFor="last-period">Date</Label>
                 <Input id="last-period" type="date" value={lastPeriodDate} onChange={(e) => setLastPeriodDate(e.target.value)} className="text-white" />
               </div>
               <Button size="lg" className="w-full" onClick={() => (lastPeriodDate ? setStep("period_insights") : setStep("salary"))}>
-                {lastPeriodDate ? "Continue" : "Skip — I’ll track later"}
+                {lastPeriodDate ? "Continue" : "Skip  -  I’ll track later"}
               </Button>
               <Button type="button" variant="ghost" className="w-full text-white/50" onClick={() => { setLastPeriodDate(""); setStep("salary"); }}>
                 Skip period tracking
@@ -447,8 +447,8 @@ export function OnboardingChat() {
             <motion.div key="pi" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-4">
               {bubble(
                 nextPeriodPreview
-                  ? `Rough estimate: your next period may start around ${nextPeriodPreview} (assuming ~${cycleDays} day cycles — not medical advice).`
-                  : "We couldn’t estimate the next date — add a clearer last-period date anytime in the app later.",
+                  ? `Rough estimate: your next period may start around ${nextPeriodPreview} (assuming ~${cycleDays} day cycles  -  not medical advice).`
+                  : "We couldn’t estimate the next date  -  add a clearer last-period date anytime in the app later.",
                 true
               )}
               <div className="rounded-xl border border-white/10 bg-white/5 p-3 text-xs text-white/70 space-y-2">
@@ -477,7 +477,7 @@ export function OnboardingChat() {
 
           {step === "sip_goal" && (
             <motion.div key="sip" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-4">
-              {bubble("How much would you like to put into SIPs each month (₹)? Pick a goal too — we’ll suggest a range.", true)}
+              {bubble("How much would you like to put into SIPs each month (₹)? Pick a goal too  -  we’ll suggest a range.", true)}
               <div className="space-y-1.5">
                 <Label htmlFor="sip">Monthly SIP (₹)</Label>
                 <Input id="sip" type="text" inputMode="numeric" placeholder="e.g. 500" value={sipInput} onChange={(e) => setSipInput(e.target.value.replace(/[^\d]/g, ""))} />
@@ -497,7 +497,7 @@ export function OnboardingChat() {
 
           {step === "summary" && (
             <motion.div key="sum" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-4 text-left">
-              {bubble("Here’s a quick preview before we save — you can adjust SIP anytime.", true)}
+              {bubble("Here’s a quick preview before we save  -  you can adjust SIP anytime.", true)}
               <div className="rounded-xl border border-emerald-500/20 bg-emerald-950/20 p-4 text-xs text-white/75 space-y-3">
                 <p>
                   <span className="text-white/90 font-medium">Salary (in hand):</span> ₹
@@ -510,7 +510,7 @@ export function OnboardingChat() {
                 {sipHint && (
                   <p>
                     <span className="text-white/90 font-medium">Rule-of-thumb for your goal:</span> ~₹
-                    {sipHint.suggested.toLocaleString("en-IN")}/mo — {sipHint.note}
+                    {sipHint.suggested.toLocaleString("en-IN")}/mo  -  {sipHint.note}
                   </p>
                 )}
                 {nextPeriodPreview && (
@@ -519,14 +519,14 @@ export function OnboardingChat() {
                   </p>
                 )}
                 <p className="text-white/45 pt-2 border-t border-white/10">
-                  Educational only — not investment advice. Consult a qualified advisor for suitability.
+                  Educational only  -  not investment advice. Consult a qualified advisor for suitability.
                 </p>
               </div>
               {saveMsg && <p className="text-red-400 text-sm">{saveMsg}</p>}
               <Button size="lg" className="w-full" disabled={saving} onClick={() => void submitAll()}>
                 {saving ? (
                   <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" aria-hidden />
+                    <LoaderIcon size={16} className="mr-2" aria-hidden="true" />
                     Saving…
                   </>
                 ) : (

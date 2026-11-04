@@ -1,5 +1,5 @@
 /**
- * Strips BOM, whitespace, and optional wrapping quotes — common when pasting into .env.local.
+ * Strips BOM, whitespace, and optional wrapping quotes  -  common when pasting into .env.local.
  */
 export function normalizeSupabasePublicEnv(value: string | undefined): string {
   if (value === undefined || value === null) return "";
